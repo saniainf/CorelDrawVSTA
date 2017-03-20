@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,17 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using corel = Corel.Interop.VGCore;
 
-namespace VSTAGlobal
+namespace DockerTemplateCS1
 {
-    /// <summary>
-    /// Логика взаимодействия для UserControl1.xaml
-    /// </summary>
-    public partial class UserControl1 : UserControl
+
+    public partial class DockerUI : UserControl
     {
-        public UserControl1()
+        private corel.Application corelApp;
+        public DockerUI(corel.Application app)
         {
+            this.corelApp = app;
             InitializeComponent();
+        }
+
+        private void doSmartTrimMark(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

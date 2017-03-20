@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="DockerTemplateCS1.DockerUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DockerTemplateCS1"
+             mc:Ignorable="d" 
+             MinWidth="225">
+    <Grid Margin="5,5,5,5">
+        <StackPanel>
+            <ListBox>
+                <ListBoxItem>ListBox Item #1</ListBoxItem>
+                <ListBoxItem>ListBox Item #2</ListBoxItem>
+                <ListBoxItem>ListBox Item #3</ListBoxItem>
+            </ListBox>
+            <CheckBox Content="White SubMark" Margin="0,10,0,0"></CheckBox>
+            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="doSmartTrimMark"></Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
