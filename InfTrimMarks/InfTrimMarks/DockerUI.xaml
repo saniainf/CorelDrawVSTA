@@ -28,8 +28,12 @@
                 <StackPanel>
                     <CheckBox Content="White SubMark" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <TextBox Text="1" Width="40" PreviewTextInput="NumberValidationTextBox"></TextBox>
+                        <TextBox Name="tbOffset" Text="1" Width="40" PreviewTextInput="NumberValidationTextBox" GotFocus ="textBox_GotFocus" LostFocus="textBox_LostFocus"></TextBox>
                         <TextBlock Margin="5,0,0,0" Text="Offset"></TextBlock>
+                    </DockPanel>
+                    <DockPanel Margin="0,7,0,0" Height="auto">
+                        <TextBox Name="tbMarkHeight" Text="4" Width="40" PreviewTextInput="NumberValidationTextBox" GotFocus ="textBox_GotFocus" LostFocus="textBox_LostFocus"></TextBox>
+                        <TextBlock Margin="5,0,0,0" Text="Mark height"></TextBlock>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -53,9 +57,9 @@
                 </StackPanel>
             </Grid>
             <Separator Margin="0,10,0,0"></Separator>
-            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="Button_Click"></Button>
+            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="doSmartTrimMark"></Button>
             <Separator Margin="0,10,0,0"></Separator>
-            <Expander Header="Custom Marks">
+            <!--<Expander Header="Custom Marks">
                 <StackPanel>
                     <Grid Width="54" Height="54" HorizontalAlignment="Left">
                         <Grid.ColumnDefinitions>
@@ -79,7 +83,7 @@
                         <RadioButton Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></RadioButton>
                     </Grid>
                 </StackPanel>
-            </Expander>
+            </Expander>-->
         </StackPanel>
     </Grid>
 
