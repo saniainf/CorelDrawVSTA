@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
+using System.Text.RegularExpressions;
 
 namespace DockerTemplateCS1
 {
@@ -92,6 +93,17 @@ namespace DockerTemplateCS1
                     return false;
             }
             return true;
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(lbPresetsList.SelectedItem.ToString());
         }
     }
 }

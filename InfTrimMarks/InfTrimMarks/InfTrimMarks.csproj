@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8DB5C649-D655-4806-8E7B-EC23EB76F2EE}</ProjectGuid>
+    <ProjectGuid>{BB9F5D59-4714-4AD8-BD6B-2410BF684116}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DockerTemplateCS1</RootNamespace>
-    <AssemblyName>DockerTemplateCS1</AssemblyName>
+    <RootNamespace>InfTrimMarks</RootNamespace>
+    <AssemblyName>InfTrimMarks</AssemblyName>
     <!--<TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>-->
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -91,7 +91,6 @@
     <Content Include="AppUI.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="select.png" />
     <Content Include="UserUI.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
