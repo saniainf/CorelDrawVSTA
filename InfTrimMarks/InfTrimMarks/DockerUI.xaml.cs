@@ -39,11 +39,13 @@ namespace InfTrimMarks
 
             ShapeRange sr = new ShapeRange();
             sr = corelApp.ActiveSelectionRange;
+            double offset;
+            double markHeight;
 
             if (sr.Count == 0)
                 return;
-            double offset = Convert.ToDouble(tbOffset.Text.Replace(unitsStr, ""));
-            double markHeight = Convert.ToDouble(tbMarkHeight.Text.Replace(unitsStr, ""));
+            double.TryParse(tbOffset.Text.Replace(unitsStr, ""), out offset);
+            double.TryParse(tbMarkHeight.Text.Replace(unitsStr, ""), out markHeight);
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
             smtm.doSmartTrimMark(offset, markHeight, sr);
         }

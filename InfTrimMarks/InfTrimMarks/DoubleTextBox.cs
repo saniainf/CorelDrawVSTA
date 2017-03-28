@@ -32,7 +32,7 @@ namespace InfTrimMarks
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {
-            this.Text = this.Text.Replace(unitsStr, "");
+            this.Text = this.Text.Replace(unitsStr, string.Empty);
             base.OnGotFocus(e);
         }
 
@@ -40,7 +40,7 @@ namespace InfTrimMarks
         {
             double result;
             if (double.TryParse(this.Text, out result))
-                this.Text = result.ToString();
+                this.Text = result.ToString() + unitsStr;
             else
                 this.Undo();
             base.OnLostFocus(e);
@@ -49,6 +49,25 @@ namespace InfTrimMarks
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             e.Handled = (e.Key == Key.Space);
+
+            if (e.Key == Key.Up)
+            {
+                double result;
+                double.TryParse(this.Text, out result);
+                result = Math.Round(result);
+                result++;
+                Text = result.ToString();
+            }
+
+            if (e.Key == Key.Down)
+            {
+                double result;
+                double.TryParse(this.Text, out result);
+                result = Math.Round(result);
+                if (result > 0)
+                    result--;
+                Text = result.ToString();
+            }
             base.OnPreviewKeyDown(e);
         }
 
