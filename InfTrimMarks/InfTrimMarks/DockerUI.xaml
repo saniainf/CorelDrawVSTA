@@ -22,18 +22,18 @@
             </ListBox>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <CheckBox Content="White SubMark" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <TextBox Name="tbOffset" Text="1" Width="40" PreviewTextInput="NumberValidationTextBox" GotFocus ="textBox_GotFocus" LostFocus="textBox_LostFocus"></TextBox>
-                        <TextBlock Margin="5,0,0,0" Text="Offset"></TextBlock>
+                        <local:DoubleTextBox x:Name="tbOffset" Width="55"></local:DoubleTextBox>
+                        <TextBlock Margin="5,0,3,0" Text="Offset"></TextBlock>
                     </DockPanel>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <TextBox Name="tbMarkHeight" Text="4" Width="40" PreviewTextInput="NumberValidationTextBox" GotFocus ="textBox_GotFocus" LostFocus="textBox_LostFocus"></TextBox>
-                        <TextBlock Margin="5,0,0,0" Text="Mark height"></TextBlock>
+                        <local:DoubleTextBox x:Name="tbMarkHeight" Width="55"></local:DoubleTextBox>
+                        <TextBlock Margin="5,0,3,0" Text="Mark height"></TextBlock>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">

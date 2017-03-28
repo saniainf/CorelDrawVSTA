@@ -46,7 +46,7 @@ This file defines new UI elements that all workspaces will contain
                 type="checkButton"
                 check="*Docker('5974a817-b075-4901-bd3d-57b1c6623de9')"
                 dynamicCategory="2cc24a3e-fe24-4708-9a74-9c75406eebcd"
-                userCaption="InfTrimMarks"
+                userCaption="Inf Trim Marks"
                 enable="true"/>
 
       <!-- Define the web control which will be placed on our docker -->
@@ -64,7 +64,7 @@ This file defines new UI elements that all workspaces will contain
 
       <!-- Define the web docker -->
       <dockerData guid="5974a817-b075-4901-bd3d-57b1c6623de9"
-                  userCaption="InfTrimMarks"
+                  userCaption="Inf Trim Marks"
                   wantReturn="true"
                   focusStyle="noThrow">
         <container>

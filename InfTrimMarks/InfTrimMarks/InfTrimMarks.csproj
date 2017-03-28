@@ -50,6 +50,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DoubleTextBox.cs" />
+    <Compile Include="SmartTrimMark.cs" />
     <Compile Include="TrimMarksPreset.cs" />
     <Page Include="DockerUI.xaml">
       <Generator>MSBuild:Compile</Generator>
