@@ -47,7 +47,7 @@ namespace InfTrimMarks
             }
         }
 
-        public void DoSmartTrimMarksOneShoot(double offset, double markHeight, ShapeRange sr)
+        public void DoSmartTrimMarksOneShoot(double offset, double markHeight, ShapeRange sr, bool? whiteSubMark, bool? leftEdge, bool? rightEdge, bool? topEdge, bool? bottomEdge)
         {
             corel.Rect rect = new corel.Rect();
             ShapeRange marks = new ShapeRange();
@@ -56,27 +56,55 @@ namespace InfTrimMarks
             {
                 rect = s.BoundingBox;
 
-                Mark lb = new Mark(rect.Left - offset, rect.Bottom, new System.Windows.Vector(-1, 0), 4);
-                Mark lt = new Mark(rect.Left - offset, rect.Top, new System.Windows.Vector(-1, 0), 4);
-                Mark tl = new Mark(rect.Left, rect.Top + offset, new System.Windows.Vector(0, 1), 4);
-                Mark tr = new Mark(rect.Right, rect.Top + offset, new System.Windows.Vector(0, 1), 4);
-                Mark rb = new Mark(rect.Right + offset, rect.Bottom, new System.Windows.Vector(1, 0), 4);
-                Mark rt = new Mark(rect.Right + offset, rect.Top, new System.Windows.Vector(1, 0), 4);
-                Mark bl = new Mark(rect.Left, rect.Bottom - offset, new System.Windows.Vector(0, -1), 4);
-                Mark br = new Mark(rect.Right, rect.Bottom - offset, new System.Windows.Vector(0, -1), 4);
+                Mark lb = new Mark(rect.Left - offset, rect.Bottom, -1, 0, markHeight);
+                Mark lt = new Mark(rect.Left - offset, rect.Top, -1, 0, markHeight);
+                Mark tl = new Mark(rect.Left, rect.Top + offset, 0, 1, markHeight);
+                Mark tr = new Mark(rect.Right, rect.Top + offset, 0, 1, markHeight);
+                Mark rb = new Mark(rect.Right + offset, rect.Bottom, 1, 0, markHeight);
+                Mark rt = new Mark(rect.Right + offset, rect.Top, 1, 0, markHeight);
+                Mark bl = new Mark(rect.Left, rect.Bottom - offset, 0, -1, markHeight);
+                Mark br = new Mark(rect.Right, rect.Bottom - offset, 0, -1, markHeight);
 
-                drawMark(marks, sr, lb);
-                drawMark(marks, sr, lt);
-                drawMark(marks, sr, tl);
-                drawMark(marks, sr, tr);
-                drawMark(marks, sr, rb);
-                drawMark(marks, sr, rt);
-                drawMark(marks, sr, bl);
-                drawMark(marks, sr, br);
+                drawMark(marks, sr, lb, true);
+                drawMark(marks, sr, lt, true);
+                drawMark(marks, sr, tl, true);
+                drawMark(marks, sr, tr, true);
+                drawMark(marks, sr, rb, true);
+                drawMark(marks, sr, rt, true);
+                drawMark(marks, sr, bl, true);
+                drawMark(marks, sr, br, true);
             }
+            removeDoubleLine(marks);
+            removeOutsideLine(marks, sr.BoundingBox, leftEdge ?? false, rightEdge ?? false, topEdge ?? false, bottomEdge ?? false);
+            corel.Shape groupMarks = marks.Group();
+            if (whiteSubMark ?? false)
+            {
+                corel.Shape wsm = groupMarks.Duplicate();
+                wsm.Outline.SetProperties(1, corelApp.OutlineStyles[0], corelApp.CreateCMYKColor(0, 0, 0, 0));
+                wsm.OrderBackOne();
+                ShapeRange tempSr = new ShapeRange();
+                tempSr.Add(wsm);
+                tempSr.Add(groupMarks);
+                groupMarks = tempSr.Group();
+            }
+        }
 
-            deleteDoubleLine(marks);
-            marks.Group();
+        private void removeOutsideLine(ShapeRange marks, corel.Rect rect, bool leftEdge, bool rightEdge, bool topEdge, bool bottomEdge)
+        {
+            ShapeRange toRemove = new ShapeRange();
+            foreach (corel.Shape s in marks)
+            {
+                if (leftEdge && s.RightX < rect.Left)
+                    toRemove.Add(s);
+                if (rightEdge && s.LeftX > rect.Right)
+                    toRemove.Add(s);
+                if (topEdge && s.BottomY > rect.Top)
+                    toRemove.Add(s);
+                if (bottomEdge && s.TopY < rect.Bottom)
+                    toRemove.Add(s);
+            }
+            marks.RemoveRange(toRemove);
+            toRemove.Delete();
         }
 
         private corel.Shape drawLine(Mark mark)
@@ -90,19 +118,28 @@ namespace InfTrimMarks
             return line;
         }
 
-        private void drawMark(ShapeRange marks, ShapeRange sr, Mark mark)
+        private void drawMark(ShapeRange marks, ShapeRange sr, Mark mark, bool canDecrease)
         {
-            do
+
+            if (canDecrease)
+            {
+                do
+                {
+                    if (!endPointInside(sr, mark))
+                    {
+                        marks.Add(drawLine(mark));
+                        return;
+                    }
+                    else
+                        mark.Height = mark.Height - decrement;
+
+                } while (mark.Height > 0);
+            }
+            else
             {
                 if (!endPointInside(sr, mark))
-                {
                     marks.Add(drawLine(mark));
-                    return;
-                }
-                else
-                    mark.Height = mark.Height - decrement;
-
-            } while (mark.Height > 0);
+            }
         }
 
         private bool endPointInside(ShapeRange sr, Mark mark)
@@ -117,9 +154,9 @@ namespace InfTrimMarks
             return false;
         }
 
-        private void deleteDoubleLine(ShapeRange marks)
+        private void removeDoubleLine(ShapeRange marks)
         {
-            ShapeRange toDelete = new ShapeRange();
+            ShapeRange toRemove = new ShapeRange();
             for (int i = 1; i <= marks.Count; i++)
             {
                 for (int j = i + 1; j <= marks.Count; j++)
@@ -127,10 +164,11 @@ namespace InfTrimMarks
                     corel.Rect sr = marks.Shapes[i].BoundingBox;
                     corel.Rect r = marks.Shapes[j].BoundingBox;
                     if (sr.Left == r.Left && sr.Right == r.Right && sr.Top == r.Top && sr.Bottom == r.Bottom)
-                        toDelete.Add(marks.Shapes[i]);
+                        toRemove.Add(marks.Shapes[i]);
                 }
             }
-            toDelete.Delete();
+            marks.RemoveRange(toRemove);
+            toRemove.Delete();
         }
     }
 }

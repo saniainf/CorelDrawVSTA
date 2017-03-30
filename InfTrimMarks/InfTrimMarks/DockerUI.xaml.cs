@@ -47,7 +47,12 @@ namespace InfTrimMarks
             double.TryParse(tbOffset.Text.Replace(unitsStr, ""), out offset);
             double.TryParse(tbMarkHeight.Text.Replace(unitsStr, ""), out markHeight);
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
-            smtm.DoSmartTrimMarksOneShoot(offset, markHeight, sr);
+            corelApp.Optimization = true;
+            smtm.DoSmartTrimMarksOneShoot(offset, markHeight, sr, ckbWhiteSubMark.IsChecked, ckbLeft.IsChecked, ckbRight.IsChecked, ckbTop.IsChecked, ckbBottom.IsChecked);
+            corelApp.ActiveDocument.ClearSelection();
+            corelApp.Optimization = false;
+            corelApp.ActiveWindow.Refresh();
+            corelApp.Refresh();
         }
     }
 }
