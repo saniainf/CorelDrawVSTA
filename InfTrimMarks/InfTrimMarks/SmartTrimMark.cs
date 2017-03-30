@@ -21,53 +21,116 @@ namespace InfTrimMarks
     class SmartTrimMark
     {
         private corel.Application corelApp;
+        private double safeZone = 0.5d;
+        double decrement = 0.5d;
 
         public SmartTrimMark(corel.Application app)
         {
             this.corelApp = app;
         }
 
-        public void doSmartTrimMark(double offset, double markHeight, ShapeRange sr)
+        public void DoSmartTrimMark(double offset, double markHeight, ShapeRange sr)
         {
             corel.Rect rect = new corel.Rect();
 
             foreach (corel.Shape s in sr)
             {
                 rect = s.BoundingBox;
-                drawLine(sr, rect.Left + offset, rect.Bottom, rect.Left + offset, rect.Bottom - markHeight);
-                drawLine(sr, rect.Right - offset, rect.Bottom, rect.Right - offset, rect.Bottom - markHeight);
-                drawLine(sr, rect.Left, rect.Bottom + offset, rect.Left - markHeight, rect.Bottom + offset);
-                drawLine(sr, rect.Left, rect.Top - offset, rect.Left - markHeight, rect.Top - offset);
-                drawLine(sr, rect.Left + offset, rect.Top, rect.Left + offset, rect.Top + markHeight);
-                drawLine(sr, rect.Right - offset, rect.Top, rect.Right - offset, rect.Top + markHeight);
-                drawLine(sr, rect.Right, rect.Top - offset, rect.Right + markHeight, rect.Top - offset);
-                drawLine(sr, rect.Right, rect.Bottom + offset, rect.Right + markHeight, rect.Bottom + offset);
+                //drawLine(rect.Left + offset, rect.Bottom, rect.Left + offset, rect.Bottom - markHeight);
+                //drawLine(rect.Right - offset, rect.Bottom, rect.Right - offset, rect.Bottom - markHeight);
+                //drawLine(rect.Left, rect.Bottom + offset, rect.Left - markHeight, rect.Bottom + offset);
+                //drawLine(rect.Left, rect.Top - offset, rect.Left - markHeight, rect.Top - offset);
+                //drawLine(rect.Left + offset, rect.Top, rect.Left + offset, rect.Top + markHeight);
+                //drawLine(rect.Right - offset, rect.Top, rect.Right - offset, rect.Top + markHeight);
+                //drawLine(rect.Right, rect.Top - offset, rect.Right + markHeight, rect.Top - offset);
+                //drawLine(rect.Right, rect.Bottom + offset, rect.Right + markHeight, rect.Bottom + offset);
             }
         }
 
-        private void drawLine(ShapeRange sr, double startX, double startY, double endX, double endY)
+        public void DoSmartTrimMarksOneShoot(double offset, double markHeight, ShapeRange sr)
+        {
+            corel.Rect rect = new corel.Rect();
+            ShapeRange marks = new ShapeRange();
+
+            foreach (corel.Shape s in sr)
+            {
+                rect = s.BoundingBox;
+
+                Mark lb = new Mark(rect.Left - offset, rect.Bottom, new System.Windows.Vector(-1, 0), 4);
+                Mark lt = new Mark(rect.Left - offset, rect.Top, new System.Windows.Vector(-1, 0), 4);
+                Mark tl = new Mark(rect.Left, rect.Top + offset, new System.Windows.Vector(0, 1), 4);
+                Mark tr = new Mark(rect.Right, rect.Top + offset, new System.Windows.Vector(0, 1), 4);
+                Mark rb = new Mark(rect.Right + offset, rect.Bottom, new System.Windows.Vector(1, 0), 4);
+                Mark rt = new Mark(rect.Right + offset, rect.Top, new System.Windows.Vector(1, 0), 4);
+                Mark bl = new Mark(rect.Left, rect.Bottom - offset, new System.Windows.Vector(0, -1), 4);
+                Mark br = new Mark(rect.Right, rect.Bottom - offset, new System.Windows.Vector(0, -1), 4);
+
+                drawMark(marks, sr, lb);
+                drawMark(marks, sr, lt);
+                drawMark(marks, sr, tl);
+                drawMark(marks, sr, tr);
+                drawMark(marks, sr, rb);
+                drawMark(marks, sr, rt);
+                drawMark(marks, sr, bl);
+                drawMark(marks, sr, br);
+            }
+
+            deleteDoubleLine(marks);
+            marks.Group();
+        }
+
+        private corel.Shape drawLine(Mark mark)
         {
             corel.Shape line;
             corel.Color color = corelApp.CreateRegistrationColor();
             OutlineStyle oStyle = corelApp.OutlineStyles[0];
             double width = 0.0762;
-
-            if (checkPoint(sr, endX, endY))
-            {
-                line = corelApp.ActiveLayer.CreateLineSegment(startX, startY, endX, endY);
-                line.Outline.SetProperties(width, oStyle, color);
-            }
+            line = corelApp.ActiveLayer.CreateLineSegment(mark.StartX, mark.StartY, mark.EndX, mark.EndY);
+            line.Outline.SetProperties(width, oStyle, color);
+            return line;
         }
 
-        bool checkPoint(ShapeRange sr, double x, double y)
+        private void drawMark(ShapeRange marks, ShapeRange sr, Mark mark)
+        {
+            do
+            {
+                if (!endPointInside(sr, mark))
+                {
+                    marks.Add(drawLine(mark));
+                    return;
+                }
+                else
+                    mark.Height = mark.Height - decrement;
+
+            } while (mark.Height > 0);
+        }
+
+        private bool endPointInside(ShapeRange sr, Mark mark)
         {
             foreach (corel.Shape s in sr)
             {
                 corel.Rect r = s.BoundingBox;
-                if (r.IsPointInside(x, y))
-                    return false;
+                if (mark.EndX >= (r.Left - safeZone) && mark.EndX <= (r.Right + safeZone))
+                    if (mark.EndY <= (r.Top + safeZone) && mark.EndY >= (r.Bottom - safeZone))
+                        return true;
             }
-            return true;
+            return false;
+        }
+
+        private void deleteDoubleLine(ShapeRange marks)
+        {
+            ShapeRange toDelete = new ShapeRange();
+            for (int i = 1; i <= marks.Count; i++)
+            {
+                for (int j = i + 1; j <= marks.Count; j++)
+                {
+                    corel.Rect sr = marks.Shapes[i].BoundingBox;
+                    corel.Rect r = marks.Shapes[j].BoundingBox;
+                    if (sr.Left == r.Left && sr.Right == r.Right && sr.Top == r.Top && sr.Bottom == r.Bottom)
+                        toDelete.Add(marks.Shapes[i]);
+                }
+            }
+            toDelete.Delete();
         }
     }
 }

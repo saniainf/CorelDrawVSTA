@@ -47,7 +47,7 @@ namespace InfTrimMarks
             double.TryParse(tbOffset.Text.Replace(unitsStr, ""), out offset);
             double.TryParse(tbMarkHeight.Text.Replace(unitsStr, ""), out markHeight);
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
-            smtm.doSmartTrimMark(offset, markHeight, sr);
+            smtm.DoSmartTrimMarksOneShoot(offset, markHeight, sr);
         }
     }
 }

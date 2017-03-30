@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DoubleTextBox.cs" />
+    <Compile Include="Mark.cs" />
     <Compile Include="SmartTrimMark.cs" />
     <Compile Include="TrimMarksPreset.cs" />
     <Page Include="DockerUI.xaml">
