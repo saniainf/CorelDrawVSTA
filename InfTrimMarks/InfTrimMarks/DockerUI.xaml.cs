@@ -1,21 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
-using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace InfTrimMarks
 {
@@ -35,8 +21,10 @@ namespace InfTrimMarks
 
         private void doSmartTrimMark(object sender, RoutedEventArgs e)
         {
-            corelApp.ActiveDocument.Unit = cdrUnit.cdrMillimeter;
+            if (corelApp.Documents.Count == 0)
+                return;
 
+            corelApp.ActiveDocument.Unit = cdrUnit.cdrMillimeter;
             ShapeRange sr = new ShapeRange();
             sr = corelApp.ActiveSelectionRange;
             double offset;
@@ -44,11 +32,14 @@ namespace InfTrimMarks
 
             if (sr.Count == 0)
                 return;
+            if ((chxLeft.IsChecked ?? false) && (chxRight.IsChecked ?? false) && (chxTop.IsChecked ?? false) && (chxBottom.IsChecked ?? false))
+                return;
+
             double.TryParse(tbOffset.Text.Replace(unitsStr, ""), out offset);
             double.TryParse(tbMarkHeight.Text.Replace(unitsStr, ""), out markHeight);
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
             corelApp.Optimization = true;
-            smtm.DoSmartTrimMarksOneShoot(offset, markHeight, sr, ckbWhiteSubMark.IsChecked, ckbLeft.IsChecked, ckbRight.IsChecked, ckbTop.IsChecked, ckbBottom.IsChecked);
+            smtm.DoSmartTrimMarks(chxCanDecrease.IsChecked ?? false, chxOneShootCut.IsChecked ?? false, offset, markHeight, sr, chxWhiteSubMark.IsChecked ?? false, chxLeft.IsChecked ?? false, chxRight.IsChecked ?? false, chxTop.IsChecked ?? false, chxBottom.IsChecked ?? false);
             corelApp.ActiveDocument.ClearSelection();
             corelApp.Optimization = false;
             corelApp.ActiveWindow.Refresh();

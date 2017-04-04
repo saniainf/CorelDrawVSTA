@@ -13,6 +13,10 @@ namespace InfTrimMarks
         public double EndX { get { return (startX + height * directionX); } }
         public double EndY { get { return (startY + height * directionY); } }
         public double Height { get { return height; } set { height = value; } }
+        public double CenterX { get { return (startX + (height / 2) * directionX); } }
+        public double CenterY { get { return (startY + (height / 2) * directionY); } }
+        public int DirectionX { get { return directionX; } }
+        public int DirectionY { get { return directionY; } }
 
         private double startX;
         private double startY;

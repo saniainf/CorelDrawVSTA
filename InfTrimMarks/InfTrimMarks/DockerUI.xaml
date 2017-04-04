@@ -8,7 +8,7 @@
              MinWidth="225">
     <Grid Margin="5,5,5,5">
         <StackPanel>
-            <ListBox Name="lbPresetsList" MaxHeight="110" SelectedIndex="0">
+            <!--<ListBox Name="lbPresetsList" MaxHeight="110" SelectedIndex="0">
                 <ListBoxItem>Item 1</ListBoxItem>
                 <ListBoxItem>Item 2</ListBoxItem>
                 <ListBoxItem>Item 3</ListBoxItem>
@@ -19,21 +19,23 @@
                 <ListBoxItem>Item 8</ListBoxItem>
                 <ListBoxItem>Item 9</ListBoxItem>
                 <ListBoxItem>Item 10</ListBoxItem>
-            </ListBox>
+            </ListBox>-->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel>
-                    <CheckBox Name="ckbWhiteSubMark" Content="White SubMark" Margin="0,7,0,0" IsChecked="True"></CheckBox>
+                    <CheckBox Name="chxOneShootCut" Content="One Cutting" Margin="0,7,0,0" IsChecked="False"></CheckBox>
+                    <CheckBox Name="chxWhiteSubMark" Content="White SubMark" Margin="0,7,0,0" IsChecked="True"></CheckBox>
+                    <CheckBox Name="chxCanDecrease" Content="Can Decrease" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <local:DoubleTextBox x:Name="tbOffset" Width="55"></local:DoubleTextBox>
-                        <TextBlock Margin="5,0,3,0" Text="Offset"></TextBlock>
+                        <local:DoubleTextBox x:Name="tbOffset" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
+                        <TextBlock Margin="5,0,3,0" Text="Offset" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <local:DoubleTextBox x:Name="tbMarkHeight" Width="55"></local:DoubleTextBox>
-                        <TextBlock Margin="5,0,3,0" Text="Mark height"></TextBlock>
+                        <local:DoubleTextBox x:Name="tbMarkHeight" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
+                        <TextBlock Margin="5,0,3,0" Text="Mark height" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -49,15 +51,15 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <CheckBox Name="ckbTop" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True"></CheckBox>
-                        <CheckBox Name="ckbLeft"  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-                        <CheckBox Name="ckbRight" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-                        <CheckBox Name="ckbBottom" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox Name="chxTop" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="True"></CheckBox>
+                        <CheckBox Name="chxLeft"  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox Name="chxRight" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox Name="chxBottom" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
                     </Grid>
                 </StackPanel>
             </Grid>
             <Separator Margin="0,10,0,0"></Separator>
-            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="doSmartTrimMark"></Button>
+            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="doSmartTrimMark" IsDefault="True"></Button>
             <Separator Margin="0,10,0,0"></Separator>
             <!--<Expander Header="Custom Marks">
                 <StackPanel>
