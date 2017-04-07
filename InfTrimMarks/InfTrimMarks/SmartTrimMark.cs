@@ -91,7 +91,7 @@ namespace InfTrimMarks
             {
                 do
                 {
-                    if (!crossLineAABB(crossShape, mark))
+                    if (!endPointInside(crossShape, mark))
                     {
                         marks.Add(drawLine(mark));
                         return;
@@ -103,7 +103,7 @@ namespace InfTrimMarks
             }
             else
             {
-                if (!crossLineAABB(crossShape, mark))
+                if (!endPointInside(crossShape, mark))
                     marks.Add(drawLine(mark));
             }
         }
@@ -113,13 +113,13 @@ namespace InfTrimMarks
             ShapeRange toRemove = new ShapeRange();
             foreach (corel.Shape s in marks)
             {
-                if (leftEdge && s.RightX < rect.Left + safeZone)
+                if (leftEdge && s.LeftX < rect.Left - safeZone)
                     toRemove.Add(s);
-                if (rightEdge && s.LeftX > rect.Right - safeZone)
+                if (rightEdge && s.RightX > rect.Right + safeZone)
                     toRemove.Add(s);
-                if (topEdge && s.BottomY > rect.Top - safeZone)
+                if (topEdge && s.TopY > rect.Top + safeZone)
                     toRemove.Add(s);
-                if (bottomEdge && s.TopY < rect.Bottom + safeZone)
+                if (bottomEdge && s.BottomY < rect.Bottom - safeZone)
                     toRemove.Add(s);
             }
             marks.RemoveRange(toRemove);
@@ -188,12 +188,10 @@ namespace InfTrimMarks
             return false;
         }
 
-        private bool endPointInside(ShapeRange sr, Mark mark)
+        private bool endPointInside(List<corel.Rect> rects, Mark mark)
         {
-            corel.Rect r;
-            foreach (corel.Shape s in sr)
+            foreach (corel.Rect r in rects)
             {
-                r = s.BoundingBox;
                 if (mark.EndX >= (r.Left - safeZone) && mark.EndX <= (r.Right + safeZone))
                     if (mark.EndY <= (r.Top + safeZone) && mark.EndY >= (r.Bottom - safeZone))
                         return true;
