@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="InfCDRPreflight.DockerUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfCDRPreflight"
+             mc:Ignorable="d" 
+             MinWidth="225">
+    <Grid Margin="0,0,0,0">
+        <StackPanel Margin="5">
+            <CheckBox Content="On all pages" Margin="0,5,0,0"></CheckBox>
+            <Button Content="Text to curves" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="Uniform fill to CMYK" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="Bitmap to CMYK" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="Bitmap resolution to 300 dpi" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="OLE shapes to curves" Margin="0,5,0,0" Padding="2"></Button>
+            <Separator Margin="0,10,0,5"></Separator>
+            <Button Content="Drop shadow to bitmap" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="Transparency to bitmap" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Content="Break contour group apart" Margin="0,5,0,0" Padding="2"></Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
