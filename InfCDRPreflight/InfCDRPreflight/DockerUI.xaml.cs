@@ -50,11 +50,27 @@ namespace InfCDRPreflight
                 s = sr[1];
                 sr.Remove(1);
                 if (s.Type == Corel.Interop.VGCore.cdrShapeType.cdrGroupShape)
-                    forEachShapeOnShapeRange(action, s.Shapes.All());
+                    groupShape(action, s);
                 if (s.PowerClip != null)
-                    forEachShapeOnShapeRange(action, s.PowerClip.Shapes.All());
+                    powerClipShape(action, s);
                 action(s);
             }
+        }
+
+        private void groupShape(delAction action, corel.Shape s)
+        {
+            forEachShapeOnShapeRange(action, s.Shapes.All());
+        }
+
+        private void powerClipShape(delAction action, corel.Shape s)
+        {
+            if (s.Fill.Type != Corel.Interop.VGCore.cdrFillType.cdrNoFill)
+            {
+                corel.Shape copyShape = s.Duplicate().;
+
+                //s.PowerClip.EnterEditMode();
+            }
+            forEachShapeOnShapeRange(action, s.PowerClip.Shapes.All());
         }
 
         // convert methods
