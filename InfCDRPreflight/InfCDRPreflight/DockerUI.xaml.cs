@@ -20,7 +20,7 @@ namespace InfCDRPreflight
     public partial class DockerUI : UserControl
     {
         private corel.Application corelApp;
-        private delegate void delAction(corel.Shape s);
+        private delegate void actionMethod(corel.Shape s);
         static private Random rnd = new Random();
 
         public DockerUI(corel.Application app)
@@ -29,7 +29,7 @@ namespace InfCDRPreflight
             InitializeComponent();
         }
 
-        private void startAction(delAction action)
+        private void beginAction(actionMethod method)
         {
             if (corelApp.Documents.Count == 0)
                 return;
@@ -37,12 +37,12 @@ namespace InfCDRPreflight
 
             if (chxOnAllPage.IsChecked ?? false)
                 foreach (corel.Page page in corelApp.ActiveDocument.Pages)
-                    forEachShapeOnShapeRange(action, page.Shapes.All());
+                    forEachShapeOnShapeRange(method, page.Shapes.All());
             else
-                forEachShapeOnShapeRange(action, corelApp.ActivePage.Shapes.All());
+                forEachShapeOnShapeRange(method, corelApp.ActivePage.Shapes.All());
         }
 
-        private void forEachShapeOnShapeRange(delAction action, corel.ShapeRange sr)
+        private void forEachShapeOnShapeRange(actionMethod method, corel.ShapeRange sr)
         {
             corel.Shape s;
             while (sr.Count > 0)
@@ -50,27 +50,27 @@ namespace InfCDRPreflight
                 s = sr[1];
                 sr.Remove(1);
                 if (s.Type == Corel.Interop.VGCore.cdrShapeType.cdrGroupShape)
-                    groupShape(action, s);
+                    groupShape(method, s);
                 if (s.PowerClip != null)
-                    powerClipShape(action, s);
-                action(s);
+                    powerClipShape(method, s);
+                method(s);
             }
         }
 
-        private void groupShape(delAction action, corel.Shape s)
+        private void groupShape(actionMethod method, corel.Shape s)
         {
-            forEachShapeOnShapeRange(action, s.Shapes.All());
+            forEachShapeOnShapeRange(method, s.Shapes.All());
         }
 
-        private void powerClipShape(delAction action, corel.Shape s)
+        private void powerClipShape(actionMethod method, corel.Shape s)
         {
-            if (s.Fill.Type != Corel.Interop.VGCore.cdrFillType.cdrNoFill)
-            {
-                corel.Shape copyShape = s.Duplicate().;
+            //if (s.Fill.Type != Corel.Interop.VGCore.cdrFillType.cdrNoFill)
+            //{
+            //    //corel.Shape copyShape = s.Duplicate().;
 
-                //s.PowerClip.EnterEditMode();
-            }
-            forEachShapeOnShapeRange(action, s.PowerClip.Shapes.All());
+            //    //s.PowerClip.EnterEditMode();
+            //}
+            forEachShapeOnShapeRange(method, s.PowerClip.Shapes.All());
         }
 
         // convert methods
@@ -81,7 +81,7 @@ namespace InfCDRPreflight
                 s.ConvertToCurves();
         }
 
-        private void OLEshapesToCurves(corel.Shape s)
+        private void oleShapesToCurves(corel.Shape s)
         {
             corel.Rect rect;
             if (s.Type == Corel.Interop.VGCore.cdrShapeType.cdrOLEObjectShape)
@@ -96,18 +96,79 @@ namespace InfCDRPreflight
             }
         }
 
+        private void uniformFillToCMYK(corel.Shape s)
+        {
+            if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
+                if (s.Fill.UniformColor.Type != corel.cdrColorType.cdrColorCMYK)
+                    s.Fill.UniformColor.ConvertToCMYK();
+        }
+
+        private void outlineFillToCMYK(corel.Shape s)
+        {
+            if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
+                if (s.Outline.Color.Type != corel.cdrColorType.cdrColorCMYK)
+                    s.Outline.Color.ConvertToCMYK();
+        }
+
+        private void fountainFillToCMYK(corel.Shape s)
+        {
+            if (s.Fill.Type == corel.cdrFillType.cdrFountainFill)
+            {
+                for (int i = 0; i < s.Fill.Fountain.Colors.Count; i++)
+                {
+                    if (s.Fill.Fountain.Colors[i].Color.Type != corel.cdrColorType.cdrColorCMYK)
+                        s.Fill.Fountain.Colors[i].Color.ConvertToCMYK();
+                }
+            }
+        }
+
+        private void bitmapToCMYK(corel.Shape s)
+        {
+            if (s.Type == corel.cdrShapeType.cdrBitmapShape)
+                if (s.Bitmap.Mode != corel.cdrImageType.cdrCMYKColorImage)
+                    s.Bitmap.ConvertTo(corel.cdrImageType.cdrCMYKColorImage);
+        }
+
+        private void testMethod(corel.Shape s)
+        {
+            s.Fill.UniformColor.CMYKAssign(0, 100, 50, 0);
+        }
+
         // events
 
         private void btnTextToCurves_Click(object sender, RoutedEventArgs e)
         {
-            delAction action = textToCurves;
-            startAction(action);
+            beginAction(textToCurves);
         }
 
         private void btnOLEtoCurves_Click(object sender, RoutedEventArgs e)
         {
-            delAction action = OLEshapesToCurves;
-            startAction(action);
+            beginAction(oleShapesToCurves);
+        }
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(testMethod);
+        }
+
+        private void btnUniformFillToCMYK_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(uniformFillToCMYK);
+        }
+
+        private void btnFountainFillToCMYK_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(fountainFillToCMYK);
+        }
+
+        private void btnOutlineFillToCMYK_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(outlineFillToCMYK);
+        }
+
+        private void btnBitmapToCMYK_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(bitmapToCMYK);
         }
     }
 }
