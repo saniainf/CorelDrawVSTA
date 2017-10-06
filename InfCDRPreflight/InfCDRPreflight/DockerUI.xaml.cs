@@ -129,11 +129,19 @@ namespace InfCDRPreflight
                     s.Bitmap.ConvertTo(corel.cdrImageType.cdrCMYKColorImage);
         }
 
-        private void dropShadowToBitmap(corel.Shape s)
+        private void dropShadowBreakApart(corel.Shape s)
         {
             if (s.Type == corel.cdrShapeType.cdrDropShadowGroupShape)
             {
                 s.BreakApart();
+            }
+        }
+
+        private void transparencyToBitmap(corel.Shape s)
+        {
+            if (s.Effects.LensEffect != null)
+            {
+                s.ConvertToBitmapEx(corel.cdrImageType.cdrCMYKColorImage, false, true, 300, corel.cdrAntiAliasingType.cdrNormalAntiAliasing, true, true, 95);
             }
         }
 
@@ -179,9 +187,14 @@ namespace InfCDRPreflight
             beginAction(bitmapToCMYK);
         }
 
-        private void btnDropShadowToBitmap_Click(object sender, RoutedEventArgs e)
+        private void btnDropShadowBreakApart_Click(object sender, RoutedEventArgs e)
         {
-            beginAction(dropShadowToBitmap);
+            beginAction(dropShadowBreakApart);
+        }
+
+        private void btnTransparencyToBitmap_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(transparencyToBitmap);
         }
     }
 }
