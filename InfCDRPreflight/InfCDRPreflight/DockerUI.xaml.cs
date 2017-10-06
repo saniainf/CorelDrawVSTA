@@ -37,9 +37,9 @@ namespace InfCDRPreflight
 
             if (chxOnAllPage.IsChecked ?? false)
                 foreach (corel.Page page in corelApp.ActiveDocument.Pages)
-                    forEachShapeOnShapeRange(method, page.Shapes.All());
+                    forEachShapeOnShapeRange(method, page.SelectableShapes.All());
             else
-                forEachShapeOnShapeRange(method, corelApp.ActivePage.Shapes.All());
+                forEachShapeOnShapeRange(method, corelApp.ActivePage.SelectableShapes.All());
         }
 
         private void forEachShapeOnShapeRange(actionMethod method, corel.ShapeRange sr)
@@ -64,13 +64,15 @@ namespace InfCDRPreflight
 
         private void powerClipShape(actionMethod method, corel.Shape s)
         {
-            //if (s.Fill.Type != Corel.Interop.VGCore.cdrFillType.cdrNoFill)
-            //{
-            //    //corel.Shape copyShape = s.Duplicate().;
+            //corel.ShapeRange sr = s.PowerClip.Shapes.All();
+            //s.PowerClip.EnterEditMode();
+            //forEachShapeOnShapeRange(method, sr);
+            //s.PowerClip.LeaveEditMode();
 
-            //    //s.PowerClip.EnterEditMode();
-            //}
-            forEachShapeOnShapeRange(method, s.PowerClip.Shapes.All());
+            corel.Shape pw = s;
+            corel.ShapeRange sr = s.PowerClip.Shapes.All();
+            forEachShapeOnShapeRange(method, s.PowerClip.ExtractShapes());
+            sr.AddToPowerClip(pw);
         }
 
         // convert methods
@@ -133,7 +135,7 @@ namespace InfCDRPreflight
         {
             if (s.Type == corel.cdrShapeType.cdrDropShadowGroupShape)
             {
-                s.BreakApart();
+                s.Effect.DropShadow.ShadowGroup.Separate();
             }
         }
 
@@ -164,7 +166,8 @@ namespace InfCDRPreflight
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            beginAction(testMethod);
+            //beginAction(testMethod);
+
         }
 
         private void btnUniformFillToCMYK_Click(object sender, RoutedEventArgs e)
