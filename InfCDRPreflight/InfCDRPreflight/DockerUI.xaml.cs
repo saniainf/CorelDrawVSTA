@@ -114,10 +114,10 @@ namespace InfCDRPreflight
         {
             if (s.Fill.Type == corel.cdrFillType.cdrFountainFill)
             {
-                for (int i = 0; i < s.Fill.Fountain.Colors.Count; i++)
+                foreach (corel.FountainColor c in s.Fill.Fountain.Colors)
                 {
-                    if (s.Fill.Fountain.Colors[i].Color.Type != corel.cdrColorType.cdrColorCMYK)
-                        s.Fill.Fountain.Colors[i].Color.ConvertToCMYK();
+                    if (c.Color.Type != corel.cdrColorType.cdrColorCMYK)
+                        c.Color.ConvertToCMYK();
                 }
             }
         }
@@ -127,6 +127,14 @@ namespace InfCDRPreflight
             if (s.Type == corel.cdrShapeType.cdrBitmapShape)
                 if (s.Bitmap.Mode != corel.cdrImageType.cdrCMYKColorImage)
                     s.Bitmap.ConvertTo(corel.cdrImageType.cdrCMYKColorImage);
+        }
+
+        private void dropShadowToBitmap(corel.Shape s)
+        {
+            if (s.Type == corel.cdrShapeType.cdrDropShadowGroupShape)
+            {
+                s.BreakApart();
+            }
         }
 
         private void testMethod(corel.Shape s)
@@ -169,6 +177,11 @@ namespace InfCDRPreflight
         private void btnBitmapToCMYK_Click(object sender, RoutedEventArgs e)
         {
             beginAction(bitmapToCMYK);
+        }
+
+        private void btnDropShadowToBitmap_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(dropShadowToBitmap);
         }
     }
 }
