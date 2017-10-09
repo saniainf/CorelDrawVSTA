@@ -91,6 +91,7 @@ namespace InfCDRPreflight
                 oleShape.Copy();
                 corelApp.ActiveLayer.PasteSpecial("Metafile");
                 vectShape = corelApp.ActiveSelection.Shapes.First;
+                //vectShape.ConvertToCurves();
                 vectShape.RotationAngle = oleShape.RotationAngle;
                 vectShape.SetPosition(oleRect.Left, oleRect.Top);
                 vectShape.SetSize(oleRect.Width, oleRect.Height);
