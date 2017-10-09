@@ -64,15 +64,10 @@ namespace InfCDRPreflight
 
         private void powerClipShape(actionMethod method, corel.Shape s)
         {
-            //corel.ShapeRange sr = s.PowerClip.Shapes.All();
-            //s.PowerClip.EnterEditMode();
-            //forEachShapeOnShapeRange(method, sr);
-            //s.PowerClip.LeaveEditMode();
-
-            corel.Shape pw = s;
             corel.ShapeRange sr = s.PowerClip.Shapes.All();
-            forEachShapeOnShapeRange(method, s.PowerClip.ExtractShapes());
-            sr.AddToPowerClip(pw);
+            s.PowerClip.EnterEditMode();
+            forEachShapeOnShapeRange(method, sr);
+            s.PowerClip.LeaveEditMode();
         }
 
         // convert methods
@@ -85,16 +80,23 @@ namespace InfCDRPreflight
 
         private void oleShapesToCurves(corel.Shape s)
         {
-            corel.Rect rect;
             if (s.Type == Corel.Interop.VGCore.cdrShapeType.cdrOLEObjectShape)
             {
-                rect = s.BoundingBox;
-                s.Cut();
+                corel.Rect oleRect;
+                corel.Shape vectShape;
+
+                corel.Shape oleShape = s;
+                oleRect = oleShape.BoundingBox;
+
+                oleShape.Copy();
                 corelApp.ActiveLayer.PasteSpecial("Metafile");
-                s = corelApp.ActiveSelection;
-                s.SetPosition(rect.Left, rect.Top);
-                s.SetSize(rect.Width, rect.Height);
-                forEachShapeOnShapeRange(textToCurves, s.Shapes.All());
+                vectShape = corelApp.ActiveSelection.Shapes.First;
+                vectShape.RotationAngle = oleShape.RotationAngle;
+                vectShape.SetPosition(oleRect.Left, oleRect.Top);
+                vectShape.SetSize(oleRect.Width, oleRect.Height);
+
+                vectShape.TreeNode.LinkAfter(oleShape.TreeNode);
+                oleShape.Delete();
             }
         }
 
@@ -139,7 +141,7 @@ namespace InfCDRPreflight
             }
         }
 
-        private void transparencyToBitmap(corel.Shape s)
+        private void lensEffectToBitmap(corel.Shape s)
         {
             if (s.Effects.LensEffect != null)
             {
@@ -195,9 +197,9 @@ namespace InfCDRPreflight
             beginAction(dropShadowBreakApart);
         }
 
-        private void btnTransparencyToBitmap_Click(object sender, RoutedEventArgs e)
+        private void btnLensEffectToBitmap_Click(object sender, RoutedEventArgs e)
         {
-            beginAction(transparencyToBitmap);
+            beginAction(lensEffectToBitmap);
         }
     }
 }
