@@ -37,10 +37,28 @@ namespace InfCDRPreflight
 
             if (chxOnAllPage.IsChecked ?? false)
                 foreach (corel.Page page in corelApp.ActiveDocument.Pages)
-                    forEachShapeOnShapeRange(method, page.SelectableShapes.All());
+                    forEachShapeOnShapeRange(method, page.Shapes.All());
             else
-                forEachShapeOnShapeRange(method, corelApp.ActivePage.SelectableShapes.All());
+                forEachShapeOnShapeRange(method, corelApp.ActivePage.Shapes.All());
         }
+
+        //private void beginAction(actionMethod method)
+        //{
+        //    if (corelApp.Documents.Count == 0)
+        //        return;
+        //    corelApp.ActiveDocument.Unit = corel.cdrUnit.cdrMillimeter;
+
+        //    if (chxOnAllPage.IsChecked ?? false)
+        //        foreach (corel.Page page in corelApp.ActiveDocument.Pages)
+        //            dfsTree(method, page.TreeNode);
+        //    else
+        //        dfsTree(method, corelApp.ActivePage.TreeNode);
+        //}
+
+        //private void dfsTree(actionMethod method, corel.TreeNode tn)
+        //{
+
+        //}
 
         private void forEachShapeOnShapeRange(actionMethod method, corel.ShapeRange sr)
         {
