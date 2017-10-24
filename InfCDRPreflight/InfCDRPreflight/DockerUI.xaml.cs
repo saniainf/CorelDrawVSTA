@@ -31,6 +31,7 @@ namespace InfCDRPreflight
 
         private void beginAction(actionMethod method)
         {
+            corelApp.Optimization = true;
             if (corelApp.Documents.Count == 0)
                 return;
             corelApp.ActiveDocument.Unit = corel.cdrUnit.cdrMillimeter;
@@ -40,6 +41,10 @@ namespace InfCDRPreflight
                     forEachShapeOnShapeRange(method, page.Shapes.All());
             else
                 forEachShapeOnShapeRange(method, corelApp.ActivePage.Shapes.All());
+            corelApp.ActiveDocument.ClearSelection();
+            corelApp.Optimization = false;
+            corelApp.ActiveWindow.Refresh();
+            corelApp.Application.Refresh();
         }
 
         //private void beginAction(actionMethod method)
@@ -71,6 +76,11 @@ namespace InfCDRPreflight
                     groupShape(method, s);
                 if (s.PowerClip != null)
                     powerClipShape(method, s);
+                //if (s.Type == corel.cdrShapeType.cdrSymbolShape)
+                //{
+                //    System.Windows.MessageBox.Show("Find symbol shape.", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //    break;
+                //}
                 method(s);
             }
         }
@@ -168,6 +178,14 @@ namespace InfCDRPreflight
             }
         }
 
+        private void symbolToShape(corel.Shape s)
+        {
+            if (s.Type == corel.cdrShapeType.cdrSymbolShape)
+            {
+                s.Symbol.RevertToShapes();
+            }
+        }
+
         private void testMethod(corel.Shape s)
         {
             s.Fill.UniformColor.CMYKAssign(0, 100, 50, 0);
@@ -219,6 +237,11 @@ namespace InfCDRPreflight
         private void btnLensEffectToBitmap_Click(object sender, RoutedEventArgs e)
         {
             beginAction(lensEffectToBitmap);
+        }
+
+        private void btnSymbolToShape_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(symbolToShape);
         }
     }
 }

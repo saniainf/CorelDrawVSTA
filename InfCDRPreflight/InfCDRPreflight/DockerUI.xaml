@@ -24,6 +24,7 @@
             <Button Content="Contour group break apart" Margin="0,5,0,0" Padding="2"></Button>
             <Separator Margin="0,10,0,5"></Separator>
             <Button Name="btnOLEtoCurves" Click="btnOLEtoCurves_Click" Content="OLE shapes to curves" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Name="btnSymbolToShape" Click="btnSymbolToShape_Click" Content="Symbol object to shape" Margin="0,5,0,0" Padding="2"></Button>
             <Separator Margin="0,10,0,5"></Separator>
             <Button Name="btnTest" Click="btnTest_Click" Content="Test button" Margin="0,5,0,0" Padding="2"></Button>
         </StackPanel>
