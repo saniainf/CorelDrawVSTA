@@ -15,6 +15,7 @@ namespace InfTrimMarks
         private const string unitsStr = " mm";
         private string decSep = NumberFormatInfo.CurrentInfo.CurrencyDecimalSeparator;
         private Regex numRegEx = new Regex(@"[^0-9]+");
+        private double indecValue = 1.0;
 
         static DoubleTextBox()
         {
@@ -54,8 +55,8 @@ namespace InfTrimMarks
             {
                 double result;
                 double.TryParse(this.Text, out result);
-                result = Math.Round(result);
-                result++;
+                //result = Math.Round(result);
+                result = result + indecValue;
                 Text = result.ToString();
             }
 
@@ -63,9 +64,9 @@ namespace InfTrimMarks
             {
                 double result;
                 double.TryParse(this.Text, out result);
-                result = Math.Round(result);
-                if (result > 0)
-                    result--;
+                //result = Math.Round(result);
+                if (result > indecValue + 0.1f)
+                    result = result - indecValue;
                 Text = result.ToString();
             }
             base.OnPreviewKeyDown(e);

@@ -31,10 +31,18 @@
                     <CheckBox Name="chxCanDecrease" Content="Can Decrease" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <DockPanel Margin="0,7,0,0" Height="auto">
                         <local:DoubleTextBox x:Name="tbOffset" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
+                        <StackPanel HorizontalAlignment="Left" Margin="2,0,0,0">
+                            <Button Height="11" Width="16" Content="&#x25B2;" FontSize="7" Padding="0,-2,0,0"/>
+                            <Button Height="11" Width="16" Content="&#x25BC;" FontSize="7" Padding="0,-2,0,0"/>
+                        </StackPanel>
                         <TextBlock Margin="5,0,3,0" Text="Offset" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                     <DockPanel Margin="0,7,0,0" Height="auto">
                         <local:DoubleTextBox x:Name="tbMarkHeight" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
+                        <StackPanel HorizontalAlignment="Left" Margin="2,0,0,0">
+                            <Button Height="11" Width="16" Content="&#x25B2;" FontSize="7" Padding="0,-2,0,0"/>
+                            <Button Height="11" Width="16" Content="&#x25BC;" FontSize="7" Padding="0,-2,0,0"/>
+                        </StackPanel>
                         <TextBlock Margin="5,0,3,0" Text="Mark height" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                 </StackPanel>
@@ -59,7 +67,10 @@
                 </StackPanel>
             </Grid>
             <Separator Margin="0,10,0,0"></Separator>
-            <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="0,10,0,0" Click="doSmartTrimMark" IsDefault="True"></Button>
+            <DockPanel>
+                <Button HorizontalAlignment="Left" Padding="15,2,15,2" Content="Reset" Margin="0,10,5,0" Click="resetToDefaultClick"></Button>
+                <Button HorizontalAlignment="Right" Padding="15,2,15,2" Content="Make CropMark" Margin="5,10,0,0" Click="doSmartTrimMark" IsDefault="True"></Button>
+            </DockPanel>
             <Separator Margin="0,10,0,0"></Separator>
             <!--<Expander Header="Custom Marks">
                 <StackPanel>

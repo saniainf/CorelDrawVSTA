@@ -15,8 +15,7 @@ namespace InfTrimMarks
         {
             this.corelApp = app;
             InitializeComponent();
-            tbOffset.Text = "1" + unitsStr;
-            tbMarkHeight.Text = "4" + unitsStr;
+            resetToDefault();
         }
 
         private void doSmartTrimMark(object sender, RoutedEventArgs e)
@@ -44,6 +43,24 @@ namespace InfTrimMarks
             corelApp.Optimization = false;
             corelApp.ActiveWindow.Refresh();
             corelApp.Refresh();
+        }
+
+        private void resetToDefaultClick(object sender, RoutedEventArgs e)
+        {
+            resetToDefault();
+        }
+
+        private void resetToDefault()
+        {
+            chxOneShootCut.IsChecked = false;
+            chxWhiteSubMark.IsChecked = true;
+            chxCanDecrease.IsChecked = true;
+            chxTop.IsChecked = true;
+            chxBottom.IsChecked = false;
+            chxLeft.IsChecked = false;
+            chxRight.IsChecked = false;
+            tbOffset.Text = "1" + unitsStr;
+            tbMarkHeight.Text = "4" + unitsStr;
         }
     }
 }
