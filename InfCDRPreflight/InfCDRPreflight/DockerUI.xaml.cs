@@ -98,7 +98,7 @@ namespace InfCDRPreflight
             s.PowerClip.LeaveEditMode();
         }
 
-        // convert methods
+        #region convert methods
 
         private void textToCurves(corel.Shape s)
         {
@@ -186,12 +186,22 @@ namespace InfCDRPreflight
             }
         }
 
+        private void contourGroupBreakApart(corel.Shape s)
+        {
+            if (s.Type == corel.cdrShapeType.cdrContourGroupShape)
+            {
+                s.Effect.Contour.ContourGroup.Separate();
+            }
+        }
+
         private void testMethod(corel.Shape s)
         {
             s.Fill.UniformColor.CMYKAssign(0, 100, 50, 0);
         }
 
-        // events
+        #endregion
+
+        #region buttons events
 
         private void btnTextToCurves_Click(object sender, RoutedEventArgs e)
         {
@@ -243,5 +253,53 @@ namespace InfCDRPreflight
         {
             beginAction(symbolToShape);
         }
+
+        private void btnContourGroupBreakApart_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(contourGroupBreakApart);
+        }
+
+        #endregion
+
+        #region replace color
+
+        private corel.Color replaceColor = new corel.Color();
+        private corel.Color applyColor = new corel.Color();
+
+        private void btnPickReplaceColor_Click(object sender, RoutedEventArgs e)
+        {
+            replaceColor.UserAssignEx();
+            replaceColorBar.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(replaceColor.HexValue));
+        }
+
+        private void btnPickApplyColor_Click(object sender, RoutedEventArgs e)
+        {
+            applyColor.UserAssignEx();
+            applyColorBar.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(applyColor.HexValue));
+        }
+
+        private void btnReplaceColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (rbReplaceFill.IsChecked ?? false)
+                beginAction(replaceUniformFill);
+            if (rbReplaceOutline.IsChecked ?? false)
+                beginAction(replaceOutlineColor);
+        }
+
+        private void replaceUniformFill(corel.Shape s)
+        {
+            if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
+                if (s.Fill.UniformColor.IsSame(replaceColor))
+                    s.Fill.UniformColor = applyColor;
+        }
+
+        private void replaceOutlineColor(corel.Shape s)
+        {
+            if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
+                if (s.Outline.Color.IsSame(replaceColor))
+                    s.Outline.Color = applyColor;
+        }
+
+        #endregion
     }
 }
