@@ -16,7 +16,11 @@
             <Button Name="btnFountainFillToCMYK" Click="btnFountainFillToCMYK_Click" Content="Fountain fill to CMYK" Margin="0,5,0,0" Padding="2"></Button>
             <Separator Margin="0,10,0,5"></Separator>
             <Button Name="btnBitmapToCMYK" Click="btnBitmapToCMYK_Click"  Content="Bitmap to CMYK" Margin="0,5,0,0" Padding="2"></Button>
-            <Button Content="Bitmap resolution to 300 dpi" Margin="0,5,0,0" Padding="2"></Button>
+            <DockPanel Margin="0,5,0,0">
+                <Button Name="btnResampleBitmap" Click="btnResampleBitmap_Click" Content="Resample Bitmap to" Padding="15,2,15,2"></Button>
+                <local:DoubleTextBox x:Name="tbBitmapDpi" Margin="7,0,7,0" Width="40" VerticalContentAlignment="Center" Text="300"/>
+                <TextBlock VerticalAlignment="Center">dpi</TextBlock>
+            </DockPanel>
             <Separator Margin="0,10,0,5"></Separator>
             <Button Name="btnLensEffectToBitmap" Click="btnLensEffectToBitmap_Click" Content="LensEffect to bitmap" Margin="0,5,0,0" Padding="2"></Button>
             <Separator Margin="0,10,0,5"></Separator>
