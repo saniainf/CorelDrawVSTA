@@ -30,19 +30,11 @@
                     <CheckBox Name="chxWhiteSubMark" Content="White SubMark" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <CheckBox Name="chxCanDecrease" Content="Can Decrease" Margin="0,7,0,0" IsChecked="True"></CheckBox>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <local:DoubleTextBox x:Name="tbOffset" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
-                        <StackPanel HorizontalAlignment="Left" Margin="2,0,0,0">
-                            <Button Height="11" Width="16" Content="&#x25B2;" FontSize="7" Padding="0,-2,0,0"/>
-                            <Button Height="11" Width="16" Content="&#x25BC;" FontSize="7" Padding="0,-2,0,0"/>
-                        </StackPanel>
+                        <local:NumericUpDown x:Name="tbOffset"  VerticalContentAlignment="Center"/>
                         <TextBlock Margin="5,0,3,0" Text="Offset" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                     <DockPanel Margin="0,7,0,0" Height="auto">
-                        <local:DoubleTextBox x:Name="tbMarkHeight" Width="60" Height="23" VerticalContentAlignment="Center"></local:DoubleTextBox>
-                        <StackPanel HorizontalAlignment="Left" Margin="2,0,0,0">
-                            <Button Height="11" Width="16" Content="&#x25B2;" FontSize="7" Padding="0,-2,0,0"/>
-                            <Button Height="11" Width="16" Content="&#x25BC;" FontSize="7" Padding="0,-2,0,0"/>
-                        </StackPanel>
+                        <local:NumericUpDown x:Name="tbMarkHeight" VerticalContentAlignment="Center"/>
                         <TextBlock Margin="5,0,3,0" Text="Mark height" VerticalAlignment="Center"></TextBlock>
                     </DockPanel>
                 </StackPanel>

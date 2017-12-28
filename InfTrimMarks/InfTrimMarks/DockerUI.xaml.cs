@@ -9,7 +9,6 @@ namespace InfTrimMarks
     public partial class DockerUI : UserControl
     {
         private corel.Application corelApp;
-        private const string unitsStr = " mm";
 
         public DockerUI(corel.Application app)
         {
@@ -34,8 +33,8 @@ namespace InfTrimMarks
             if ((chxLeft.IsChecked ?? false) && (chxRight.IsChecked ?? false) && (chxTop.IsChecked ?? false) && (chxBottom.IsChecked ?? false))
                 return;
 
-            double.TryParse(tbOffset.Text.Replace(unitsStr, ""), out offset);
-            double.TryParse(tbMarkHeight.Text.Replace(unitsStr, ""), out markHeight);
+            offset = tbOffset.Value;
+            markHeight = tbMarkHeight.Value;
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
             corelApp.Optimization = true;
             smtm.DoSmartTrimMarks(chxCanDecrease.IsChecked ?? false, chxOneShootCut.IsChecked ?? false, offset, markHeight, sr, chxWhiteSubMark.IsChecked ?? false, chxLeft.IsChecked ?? false, chxRight.IsChecked ?? false, chxTop.IsChecked ?? false, chxBottom.IsChecked ?? false);
@@ -59,8 +58,8 @@ namespace InfTrimMarks
             chxBottom.IsChecked = false;
             chxLeft.IsChecked = false;
             chxRight.IsChecked = false;
-            tbOffset.Text = "1" + unitsStr;
-            tbMarkHeight.Text = "4" + unitsStr;
+            tbOffset.Value = 1f;
+            tbMarkHeight.Value = 4f;
         }
     }
 }
