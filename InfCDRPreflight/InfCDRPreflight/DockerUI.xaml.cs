@@ -138,9 +138,13 @@ namespace InfCDRPreflight
 
         private void outlineFillToCMYK(corel.Shape s)
         {
-            if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
-                if (s.Outline.Color.Type != corel.cdrColorType.cdrColorCMYK)
-                    s.Outline.Color.ConvertToCMYK();
+            if (s.Type == corel.cdrShapeType.cdrCurveShape ||
+                s.Type == corel.cdrShapeType.cdrEllipseShape ||
+                s.Type == corel.cdrShapeType.cdrRectangleShape ||
+                s.Type == corel.cdrShapeType.cdrTextShape)
+                if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
+                    if (s.Outline.Color.Type != corel.cdrColorType.cdrColorCMYK)
+                        s.Outline.Color.ConvertToCMYK();
         }
 
         private void fountainFillToCMYK(corel.Shape s)
@@ -295,9 +299,13 @@ namespace InfCDRPreflight
 
         private void replaceOutlineColor(corel.Shape s)
         {
-            if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
-                if (s.Outline.Color.IsSame(replaceColor))
-                    s.Outline.Color = applyColor;
+            if (s.Type == corel.cdrShapeType.cdrCurveShape ||
+                s.Type == corel.cdrShapeType.cdrEllipseShape ||
+                s.Type == corel.cdrShapeType.cdrRectangleShape ||
+                s.Type == corel.cdrShapeType.cdrTextShape)
+                if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
+                    if (s.Outline.Color.IsSame(replaceColor))
+                        s.Outline.Color = applyColor;
         }
 
         #endregion
