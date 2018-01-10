@@ -36,15 +36,23 @@
                 <RadioButton Name="rbReplaceFill" Content="Fill" HorizontalAlignment="Left" IsChecked="True"/>
                 <RadioButton Name="rbReplaceOutline" Content="Outline" HorizontalAlignment="Left" Margin="30,0,0,0"></RadioButton>
             </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Button Content="Pick Replace Color" Click="btnPickReplaceColor_Click" Width="120" HorizontalAlignment="Left" Padding="2"></Button>
-                <Canvas Name="replaceColorBar" Background="White" Margin="20,0,0,0" Width="22" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left"></Canvas>
-            </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Button Content="Pick Apply Color" Click="btnPickApplyColor_Click" Width="120" HorizontalAlignment="Left" Padding="2"></Button>
-                <Canvas Name="applyColorBar" Background="White" Margin="20,0,0,0" Width="22" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left"></Canvas>
+            <DockPanel>
+                <StackPanel>
+                    <DockPanel Margin="0,5,0,0">
+                        <Button Content="Pick Replace Color" Click="btnPickReplaceColor_Click" Width="120" HorizontalAlignment="Left" Padding="2"></Button>
+                        <Canvas Name="replaceColorBar" Background="White" Margin="20,0,0,0" Width="22" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left"></Canvas>
+                    </DockPanel>
+                    <DockPanel Margin="0,5,0,0">
+                        <Button Content="Pick Apply Color" Click="btnPickApplyColor_Click" Width="120" HorizontalAlignment="Left" Padding="2"></Button>
+                        <Canvas Name="applyColorBar" Background="White" Margin="20,0,0,0" Width="22" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left"></Canvas>
+                    </DockPanel>
+                </StackPanel>
+                <Button Content="&#x21C5;" Click="btnSwapColor_Click" FontSize="20" Width="22" HorizontalAlignment="Left" Margin="10,5,0,0" ToolTip="Swap Color"></Button>
             </DockPanel>
             <Button Content="Replace" Click="btnReplaceColor_Click" Margin="0,20,0,0" Padding="20,2,20,2" HorizontalAlignment="Right"></Button>
+            <Separator Margin="0,10,0,5"></Separator>
+            <ListBox Name="lbFoundColors" MinHeight="50" Margin="0,5,0,0"></ListBox>
+            <Button Content="Find colors" Click="btnReplaceColor_Click" Margin="0,20,0,0" Padding="20,2,20,2" HorizontalAlignment="Right"></Button>
             <Separator Margin="0,10,0,5"></Separator>
         </StackPanel>
     </Grid>

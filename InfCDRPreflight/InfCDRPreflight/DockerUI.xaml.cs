@@ -27,13 +27,20 @@ namespace InfCDRPreflight
 		{
 			this.corelApp = app;
 			InitializeComponent();
+
+			replaceColor.CMYKAssign(0, 0, 0, 0);
+			applyColor.CMYKAssign(0, 0, 0, 100);
+			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
+			applyColorBar.Background = convertToSolidColorBrush(applyColor);
 		}
 
 		private void beginAction(actionMethod method)
 		{
-			corelApp.Optimization = true;
 			if (corelApp.Documents.Count == 0)
 				return;
+
+			corelApp.Optimization = true;
+
 			corelApp.ActiveDocument.Unit = corel.cdrUnit.cdrMillimeter;
 
 			if (chxOnAllPage.IsChecked ?? false)
@@ -41,29 +48,12 @@ namespace InfCDRPreflight
 					forEachShapeOnShapeRange(method, page.Shapes.All());
 			else
 				forEachShapeOnShapeRange(method, corelApp.ActivePage.Shapes.All());
+
 			corelApp.ActiveDocument.ClearSelection();
 			corelApp.Optimization = false;
 			corelApp.ActiveWindow.Refresh();
 			corelApp.Application.Refresh();
 		}
-
-		//private void beginAction(actionMethod method)
-		//{
-		//    if (corelApp.Documents.Count == 0)
-		//        return;
-		//    corelApp.ActiveDocument.Unit = corel.cdrUnit.cdrMillimeter;
-
-		//    if (chxOnAllPage.IsChecked ?? false)
-		//        foreach (corel.Page page in corelApp.ActiveDocument.Pages)
-		//            dfsTree(method, page.TreeNode);
-		//    else
-		//        dfsTree(method, corelApp.ActivePage.TreeNode);
-		//}
-
-		//private void dfsTree(actionMethod method, corel.TreeNode tn)
-		//{
-
-		//}
 
 		private void forEachShapeOnShapeRange(actionMethod method, corel.ShapeRange sr)
 		{
@@ -72,16 +62,20 @@ namespace InfCDRPreflight
 			{
 				s = sr[1];
 				sr.Remove(1);
+
+				// работа в группе
 				if (s.Type == Corel.Interop.VGCore.cdrShapeType.cdrGroupShape)
 					groupShape(method, s);
+
+				// работа в PowerClip
 				if (s.PowerClip != null)
 					powerClipShape(method, s);
-				//if (s.Type == corel.cdrShapeType.cdrSymbolShape)
-				//{
-				//    System.Windows.MessageBox.Show("Find symbol shape.", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
-				//    break;
-				//}
-				method(s);
+
+				// текст обрабатывается своими методами
+				if (s.Type == corel.cdrShapeType.cdrTextShape)
+					textShape(method, s);
+
+				else method(s);
 			}
 		}
 
@@ -98,18 +92,63 @@ namespace InfCDRPreflight
 			s.PowerClip.LeaveEditMode();
 		}
 
-		private bool isVector(corel.Shape s)
+		private void textShape(actionMethod method, corel.Shape s)
 		{
-			if (s.Type == corel.cdrShapeType.cdrCurveShape ||
-				s.Type == corel.cdrShapeType.cdrEllipseShape ||
-				s.Type == corel.cdrShapeType.cdrRectangleShape ||
-				s.Type == corel.cdrShapeType.cdrTextShape)
-				return true;
-			else
-				return false;
+			if (method == textToCurves)
+				method(s);
+			if (method == uniformFillToCMYK)
+				textUniformFillToCMYK(s.Text.Story.Characters);
+			if (method == outlineFillToCMYK)
+				textOutlineFillToCMYK(s.Text.Story.Characters);
+			else method(s);
+		}
+
+		private SolidColorBrush convertToSolidColorBrush(corel.Color c)
+		{
+			return
+				(SolidColorBrush)(new BrushConverter().ConvertFrom(c.HexValue));
+		}
+
+		private void testMethod(corel.Shape s)
+		{
+			//s.Fill.UniformColor.CMYKAssign(0, 100, 50, 0);
+
+			if (s.Type == corel.cdrShapeType.cdrGuidelineShape)
+				s.Delete();
+
+			//string str = "";
+			//corel.SeparationPlates plates;
+			//corel.SeparationPlate plate;
+			//plates = corelApp.ActiveDocument.PrintSettings.Separations.Plates;
+
+			//for (int j = 1; j <= plates.Count; j++)
+			//{
+			//	plate = plates[j];
+			//	if (plate.Enabled)
+			//		str = str + plate.Color.ToString() + "\n";
+			//}
+			//MessageBox.Show(str);
 		}
 
 		#region convert methods
+
+		private void textUniformFillToCMYK(corel.TextCharacters t)
+		{
+			foreach (corel.TextRange tr in t)
+			{
+				if (tr.Characters.All.Fill.UniformColor.Type != corel.cdrColorType.cdrColorCMYK)
+					tr.Characters.All.Fill.UniformColor.ConvertToCMYK();
+			}
+		}
+
+		private void textOutlineFillToCMYK(corel.TextCharacters t)
+		{
+			foreach (corel.TextRange tr in t)
+			{
+				if (tr.Characters.All.Outline.Color.Type != corel.cdrColorType.cdrColorCMYK)
+					tr.Characters.All.Outline.Color.ConvertToCMYK();
+			}
+		}
 
 		private void textToCurves(corel.Shape s)
 		{
@@ -142,7 +181,7 @@ namespace InfCDRPreflight
 
 		private void uniformFillToCMYK(corel.Shape s)
 		{
-			if (isVector(s))
+			if (s.CanHaveFill)
 				if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
 					if (s.Fill.UniformColor.Type != corel.cdrColorType.cdrColorCMYK)
 						s.Fill.UniformColor.ConvertToCMYK();
@@ -150,7 +189,7 @@ namespace InfCDRPreflight
 
 		private void outlineFillToCMYK(corel.Shape s)
 		{
-			if (isVector(s))
+			if (s.CanHaveOutline)
 				if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
 					if (s.Outline.Color.Type != corel.cdrColorType.cdrColorCMYK)
 						s.Outline.Color.ConvertToCMYK();
@@ -158,7 +197,7 @@ namespace InfCDRPreflight
 
 		private void fountainFillToCMYK(corel.Shape s)
 		{
-			if (isVector(s))
+			if (s.CanHaveFill)
 				if (s.Fill.Type == corel.cdrFillType.cdrFountainFill)
 				{
 					foreach (corel.FountainColor c in s.Fill.Fountain.Colors)
@@ -214,13 +253,6 @@ namespace InfCDRPreflight
 			{
 				s.Effect.Contour.ContourGroup.Separate();
 			}
-		}
-
-		private void testMethod(corel.Shape s)
-		{
-			//s.Fill.UniformColor.CMYKAssign(0, 100, 50, 0);
-			if (s.Type == corel.cdrShapeType.cdrGuidelineShape)
-				s.Delete();
 		}
 
 		#endregion
@@ -298,36 +330,54 @@ namespace InfCDRPreflight
 		private void btnPickReplaceColor_Click(object sender, RoutedEventArgs e)
 		{
 			replaceColor.UserAssignEx();
-			replaceColorBar.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(replaceColor.HexValue));
+			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
 		}
 
 		private void btnPickApplyColor_Click(object sender, RoutedEventArgs e)
 		{
 			applyColor.UserAssignEx();
-			applyColorBar.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(applyColor.HexValue));
+			applyColorBar.Background = convertToSolidColorBrush(applyColor);
 		}
 
 		private void btnReplaceColor_Click(object sender, RoutedEventArgs e)
 		{
 			if (rbReplaceFill.IsChecked ?? false)
-				beginAction(replaceUniformFill);
+				beginAction(replaceFillColor);
 			if (rbReplaceOutline.IsChecked ?? false)
 				beginAction(replaceOutlineColor);
 		}
 
-		private void replaceUniformFill(corel.Shape s)
+		private void btnSwapColor_Click(object sender, RoutedEventArgs e)
 		{
-			if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
-				if (s.Fill.UniformColor.IsSame(replaceColor))
-					s.Fill.UniformColor = applyColor;
+			corel.Color c = replaceColor;
+			replaceColor = applyColor;
+			applyColor = c;
+			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
+			applyColorBar.Background = convertToSolidColorBrush(applyColor);
+		}
+
+		private void replaceFillColor(corel.Shape s)
+		{
+			if (s.CanHaveFill)
+			{
+				if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
+					if (s.Fill.UniformColor.IsSame(replaceColor))
+						s.Fill.UniformColor = applyColor;
+
+				if (s.Fill.Type == corel.cdrFillType.cdrFountainFill)
+				{
+					for (int i = 0; i < s.Fill.Fountain.Colors.Count; i++)
+					{
+						if (s.Fill.Fountain.Colors[i].Color.IsSame(replaceColor))
+							s.Fill.Fountain.Colors[i].Color = applyColor;
+					}
+				}
+			}
 		}
 
 		private void replaceOutlineColor(corel.Shape s)
 		{
-			if (s.Type == corel.cdrShapeType.cdrCurveShape ||
-				s.Type == corel.cdrShapeType.cdrEllipseShape ||
-				s.Type == corel.cdrShapeType.cdrRectangleShape ||
-				s.Type == corel.cdrShapeType.cdrTextShape)
+			if (s.CanHaveOutline)
 				if (s.Outline.Type == corel.cdrOutlineType.cdrOutline)
 					if (s.Outline.Color.IsSame(replaceColor))
 						s.Outline.Color = applyColor;
