@@ -30,8 +30,7 @@ namespace InfCDRPreflight
 
 			replaceColor.CMYKAssign(0, 0, 0, 0);
 			applyColor.CMYKAssign(0, 0, 0, 100);
-			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
-			applyColorBar.Background = convertToSolidColorBrush(applyColor);
+			updateColorSampleBar();
 		}
 
 		private void beginAction(actionMethod method)
@@ -330,13 +329,13 @@ namespace InfCDRPreflight
 		private void btnPickReplaceColor_Click(object sender, RoutedEventArgs e)
 		{
 			replaceColor.UserAssignEx();
-			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
+			updateColorSampleBar();
 		}
 
 		private void btnPickApplyColor_Click(object sender, RoutedEventArgs e)
 		{
 			applyColor.UserAssignEx();
-			applyColorBar.Background = convertToSolidColorBrush(applyColor);
+			updateColorSampleBar();
 		}
 
 		private void btnReplaceColor_Click(object sender, RoutedEventArgs e)
@@ -352,8 +351,15 @@ namespace InfCDRPreflight
 			corel.Color c = replaceColor;
 			replaceColor = applyColor;
 			applyColor = c;
+			updateColorSampleBar();
+		}
+
+		private void updateColorSampleBar()
+		{
 			replaceColorBar.Background = convertToSolidColorBrush(replaceColor);
+			replaceColorBar.ToolTip = replaceColor.Type.ToString();
 			applyColorBar.Background = convertToSolidColorBrush(applyColor);
+			applyColorBar.ToolTip = applyColor.Name;
 		}
 
 		private void replaceFillColor(corel.Shape s)
