@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="InfColorConvert.DockerUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfColorConvert"
+             mc:Ignorable="d" 
+             MinWidth="225">
+    <Grid Margin="5,5,5,5">
+        <StackPanel>
+            <Label Content="Remap:" FontWeight="Bold" Margin="0,5,0,0"></Label>
+            <!--выбор что ковертировать-->
+            <ComboBox Name="cbRemapFrom" Margin="0,5,0,0" SelectionChanged="cbRemapFrom_SelectionChanged">
+                <TextBlock>Color</TextBlock>
+                <TextBlock>Color Space</TextBlock>
+                <TextBlock>Color Range</TextBlock>
+                <TextBlock>Any Color</TextBlock>
+            </ComboBox>
+            <!--конвертировать просто цвет-->
+            <StackPanel Name="spRemapColor" Margin="0,5,0,0">
+                <ComboBox Name="cbRemapColorType" SelectionChanged="cbRemapColorType_SelectionChanged">
+                    <TextBlock>CMYK</TextBlock>
+                    <TextBlock>RGB</TextBlock>
+                    <TextBlock>Gray</TextBlock>
+                    <TextBlock>Spot</TextBlock>
+                </ComboBox>
+                <!--конвертировать cmyk цвет-->
+                <StackPanel Name="spRemapColorCMYK" Margin="0,5,0,0">
+                    <Slider></Slider>
+                    <Slider></Slider>
+                    <Slider></Slider>
+                    <Slider></Slider>
+                    <Label Content="remapColorCMYK"></Label>
+                </StackPanel>
+                <!--конвертировать rgb цвет-->
+                <StackPanel Name="spRemapColorRGB" Margin="0,5,0,0">
+                    <Label Content="remapColorRGB"></Label>
+                </StackPanel>
+                <!--конвертировать gray цвет-->
+                <StackPanel Name="spRemapColorGray" Margin="0,5,0,0">
+                    <Label Content="remapColorGray"></Label>
+                </StackPanel>
+                <!--конвертировать spot цвет-->
+                <StackPanel Name="spRemapColorSpot" Margin="0,5,0,0">
+                    <Label Content="remapColorSpot"></Label>
+                </StackPanel>
+            </StackPanel>
+            <!--конвертировать из цветового пространства-->
+            <StackPanel Name="spRemapColorSpace" Margin="0,5,0,0">
+                <ComboBox Name="cbRemapColorSpaceType">
+                    <TextBlock>CMYK</TextBlock>
+                    <TextBlock>RGB</TextBlock>
+                    <TextBlock>Gray</TextBlock>
+                </ComboBox>
+                <Label Content="remapColorSpace"></Label>
+            </StackPanel>
+            <!--конвертировать из цветового диапазона-->
+            <StackPanel Name="spRemapColorRange" Margin="0,5,0,0">
+                <ComboBox Name="cbRemapColorRangeType" SelectionChanged="cbRemapColorRangeType_SelectionChanged">
+                    <TextBlock>CMYK</TextBlock>
+                    <TextBlock>RGB</TextBlock>
+                    <TextBlock>Gray</TextBlock>
+                </ComboBox>
+                <!--конвертировать из cmyk диапазона-->
+                <StackPanel Name="spRemapColorRangeCMYK" Margin="0,5,0,0">
+                    <Label Content="remapColorRangeCMYK"></Label>
+                </StackPanel>
+                <!--конвертироватьиз rgb диапазона-->
+                <StackPanel Name="spRemapColorRangeRGB" Margin="0,5,0,0">
+                    <Label Content="remapColorRangeRGB"></Label>
+                </StackPanel>
+                <!--конвертироватьиз gray диапазона-->
+                <StackPanel Name="spRemapColorRangeGray" Margin="0,5,0,0">
+                    <Label Content="remapColorRangeGray"></Label>
+                </StackPanel>
+                <Label Content="remapColorRange"></Label>
+            </StackPanel>
+            <!--конвертировать любой цвет-->
+            <StackPanel Name="spRemapAnyColor" Margin="0,5,0,0">
+                <Label Content="remapAnyColor"></Label>
+            </StackPanel>
+            
+            <Separator Margin="0,5,0,10"></Separator>
+            
+            <Label Content="To:" FontWeight="Bold" Margin="0,5,0,0"></Label>
+            <!--выбор во что конвертировать-->
+            <ComboBox Name="cbRemapTo" Margin="0,5,0,0" SelectionChanged="cbRemapTo_SelectionChanged">
+                <TextBlock>Color</TextBlock>
+                <TextBlock>Color Space</TextBlock>
+            </ComboBox>
+            <!--конвертировать в цвет-->
+            <StackPanel Name="spToColor" Margin="0,5,0,0">
+                <ComboBox Name="cbToColorType" SelectionChanged="cbToColorType_SelectionChanged">
+                    <TextBlock>CMYK</TextBlock>
+                    <TextBlock>RGB</TextBlock>
+                    <TextBlock>Gray</TextBlock>
+                </ComboBox>
+                <!--конвертировать в cmyk цвет-->
+                <StackPanel Name="spToColorCMYK" Margin="0,5,0,0">
+                    <Label Content="toColorCMYK"></Label>
+                </StackPanel>
+                <!--конвертировать в rgb цвет-->
+                <StackPanel Name="spToColorRGB" Margin="0,5,0,0">
+                    <Label Content="toColorRGB"></Label>
+                </StackPanel>
+                <!--конвертировать в gray цвет-->
+                <StackPanel Name="spToColorGray" Margin="0,5,0,0">
+                    <Label Content="toColorGray"></Label>
+                </StackPanel>
+                <Label Content="toColor"></Label>
+            </StackPanel>
+            <!--конвертировать в цветовое пространство-->
+            <StackPanel Name="spToColorSpace" Margin="0,5,0,0">
+                <ComboBox Name="cbToColorSpaceType">
+                    <TextBlock>CMYK</TextBlock>
+                    <TextBlock>RGB</TextBlock>
+                    <TextBlock>Gray</TextBlock>
+                </ComboBox>
+                <Label Content="toColorSpace"></Label>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
