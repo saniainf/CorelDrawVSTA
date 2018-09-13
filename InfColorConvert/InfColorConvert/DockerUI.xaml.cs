@@ -27,17 +27,16 @@ namespace InfColorConvert
 			InitializeComponent();
 
 			//default
-			cbRemapFrom.SelectedIndex = 0;
+			cbRemap.SelectedIndex = 0;
 			cbRemapColorType.SelectedIndex = 0;
 			cbRemapColorSpaceType.SelectedIndex = 0;
 			cbRemapColorRangeType.SelectedIndex = 0;
 
-			cbRemapTo.SelectedIndex = 0;
-			cbToColorType.SelectedIndex = 0;
+			cbTo.SelectedIndex = 0;
 			cbToColorSpaceType.SelectedIndex = 0;
 		}
 
-		private void cbRemapFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void cbRemap_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 
@@ -113,44 +112,20 @@ namespace InfColorConvert
 			}
 		}
 
-		private void cbRemapTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void cbTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 
-			spToColor.Visibility = System.Windows.Visibility.Collapsed;
+			spToUserColor.Visibility = System.Windows.Visibility.Collapsed;
 			spToColorSpace.Visibility = System.Windows.Visibility.Collapsed;
 
 			switch (comboBox.SelectedIndex)
 			{
 				case 0:
-					spToColor.Visibility = System.Windows.Visibility.Visible;
+					spToUserColor.Visibility = System.Windows.Visibility.Visible;
 					break;
 				case 1:
 					spToColorSpace.Visibility = System.Windows.Visibility.Visible;
-					break;
-				default:
-					break;
-			}
-		}
-
-		private void cbToColorType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			ComboBox comboBox = (ComboBox)sender;
-
-			spToColorCMYK.Visibility = System.Windows.Visibility.Collapsed;
-			spToColorRGB.Visibility = System.Windows.Visibility.Collapsed;
-			spToColorGray.Visibility = System.Windows.Visibility.Collapsed;
-
-			switch (comboBox.SelectedIndex)
-			{
-				case 0:
-					spToColorCMYK.Visibility = System.Windows.Visibility.Visible;
-					break;
-				case 1:
-					spToColorRGB.Visibility = System.Windows.Visibility.Visible;
-					break;
-				case 2:
-					spToColorGray.Visibility = System.Windows.Visibility.Visible;
 					break;
 				default:
 					break;
