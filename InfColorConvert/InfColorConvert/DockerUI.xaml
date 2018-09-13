@@ -6,43 +6,44 @@
              xmlns:local="clr-namespace:InfColorConvert"
              mc:Ignorable="d" 
              MinWidth="225">
-    <Grid Margin="5,5,5,5">
+    <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <StackPanel>
             <Label Content="Remap:" FontWeight="Bold" Margin="0,5,0,0"></Label>
             <!--выбор что ковертировать-->
-            <ComboBox Name="cbRemapFrom" Margin="0,5,0,0" SelectionChanged="cbRemapFrom_SelectionChanged">
+            <ComboBox Name="cbRemapFrom" Height="22" Margin="0,5,0,0" SelectionChanged="cbRemapFrom_SelectionChanged">
                 <TextBlock>Color</TextBlock>
                 <TextBlock>Color Space</TextBlock>
                 <TextBlock>Color Range</TextBlock>
                 <TextBlock>Any Color</TextBlock>
             </ComboBox>
-            <!--конвертировать просто цвет-->
+            <!--конвертировать цвет-->
             <StackPanel Name="spRemapColor" Margin="0,5,0,0">
-                <ComboBox Name="cbRemapColorType" SelectionChanged="cbRemapColorType_SelectionChanged">
-                    <TextBlock>CMYK</TextBlock>
-                    <TextBlock>RGB</TextBlock>
-                    <TextBlock>Gray</TextBlock>
-                    <TextBlock>Spot</TextBlock>
+                <ComboBox Name="cbRemapColorType" Height="22" SelectionChanged="cbRemapColorType_SelectionChanged">
+                    <TextBlock>User color</TextBlock>
+                    <TextBlock>Impure CMYK Black</TextBlock>
+                    <TextBlock>Impure CMYK Gray</TextBlock>
                 </ComboBox>
-                <!--конвертировать cmyk цвет-->
-                <StackPanel Name="spRemapColorCMYK" Margin="0,5,0,0">
-                    <Slider></Slider>
-                    <Slider></Slider>
-                    <Slider></Slider>
-                    <Slider></Slider>
-                    <Label Content="remapColorCMYK"></Label>
+                <!--конвертировать пользовательский цвет-->
+                <StackPanel Name="spRemapUserColor" Margin="0,5,0,0">
+                    <DockPanel Height="44">
+                        <Canvas Background="Gray" Name="remapUserColorBar" Width="44" Height="44"></Canvas>
+                        <StackPanel>
+                            <Button Content="Pick Remap Color" Width="120" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0"></Button>
+                            <Label Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
+                        </StackPanel>
+                    </DockPanel>
                 </StackPanel>
-                <!--конвертировать rgb цвет-->
-                <StackPanel Name="spRemapColorRGB" Margin="0,5,0,0">
-                    <Label Content="remapColorRGB"></Label>
+                <!--конвертировать грязный черный-->
+                <StackPanel Name="spRemapImpureBlack" Margin="0,5,0,0">
+                    <DockPanel Height="22">
+                        <Label Content="Color Limit Range:" Padding="0" VerticalContentAlignment="Center"></Label>
+                        <local:IntTextBox x:Name="tb" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
+                        <Label Content="%" Padding="0" VerticalContentAlignment="Center"></Label>
+                    </DockPanel>
                 </StackPanel>
-                <!--конвертировать gray цвет-->
-                <StackPanel Name="spRemapColorGray" Margin="0,5,0,0">
-                    <Label Content="remapColorGray"></Label>
-                </StackPanel>
-                <!--конвертировать spot цвет-->
-                <StackPanel Name="spRemapColorSpot" Margin="0,5,0,0">
-                    <Label Content="remapColorSpot"></Label>
+                <!--конвертировать грязный серый-->
+                <StackPanel Name="spRemapImpureGray" Margin="0,5,0,0">
+                    <Label Content="Color Limit Range"></Label>
                 </StackPanel>
             </StackPanel>
             <!--конвертировать из цветового пространства-->
@@ -79,9 +80,9 @@
             <StackPanel Name="spRemapAnyColor" Margin="0,5,0,0">
                 <Label Content="remapAnyColor"></Label>
             </StackPanel>
-            
+
             <Separator Margin="0,5,0,10"></Separator>
-            
+
             <Label Content="To:" FontWeight="Bold" Margin="0,5,0,0"></Label>
             <!--выбор во что конвертировать-->
             <ComboBox Name="cbRemapTo" Margin="0,5,0,0" SelectionChanged="cbRemapTo_SelectionChanged">

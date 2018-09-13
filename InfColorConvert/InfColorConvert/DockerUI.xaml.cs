@@ -69,24 +69,20 @@ namespace InfColorConvert
 		{
 			ComboBox comboBox = (ComboBox)sender;
 
-			spRemapColorCMYK.Visibility = System.Windows.Visibility.Collapsed;
-			spRemapColorRGB.Visibility = System.Windows.Visibility.Collapsed;
-			spRemapColorGray.Visibility = System.Windows.Visibility.Collapsed;
-			spRemapColorSpot.Visibility = System.Windows.Visibility.Collapsed;
+			spRemapUserColor.Visibility = System.Windows.Visibility.Collapsed;
+			spRemapImpureBlack.Visibility = System.Windows.Visibility.Collapsed;
+			spRemapImpureGray.Visibility = System.Windows.Visibility.Collapsed;
 
 			switch (comboBox.SelectedIndex)
 			{
 				case 0:
-					spRemapColorCMYK.Visibility = System.Windows.Visibility.Visible;
+					spRemapUserColor.Visibility = System.Windows.Visibility.Visible;
 					break;
 				case 1:
-					spRemapColorRGB.Visibility = System.Windows.Visibility.Visible;
+					spRemapImpureBlack.Visibility = System.Windows.Visibility.Visible;
 					break;
 				case 2:
-					spRemapColorGray.Visibility = System.Windows.Visibility.Visible;
-					break;
-				case 3:
-					spRemapColorSpot.Visibility = System.Windows.Visibility.Visible;
+					spRemapImpureGray.Visibility = System.Windows.Visibility.Visible;
 					break;
 				default:
 					break;
