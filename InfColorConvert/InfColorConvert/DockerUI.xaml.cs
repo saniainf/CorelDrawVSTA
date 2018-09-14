@@ -17,16 +17,19 @@ using Corel.Interop.VGCore;
 
 namespace InfColorConvert
 {
-
+	//frontend
 	public partial class DockerUI : UserControl
 	{
 		private corel.Application corelApp;
+
 		public DockerUI(corel.Application app)
 		{
 			this.corelApp = app;
 			InitializeComponent();
 
 			//default
+			tbHelpTips.Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.";
+
 			cbRemap.SelectedIndex = 0;
 			cbRemapColorType.SelectedIndex = 0;
 			cbRemapColorSpaceType.SelectedIndex = 0;
@@ -34,6 +37,8 @@ namespace InfColorConvert
 
 			cbTo.SelectedIndex = 0;
 			cbToColorSpaceType.SelectedIndex = 0;
+
+			cbApplyRange.SelectedIndex = 0;
 		}
 
 		private void cbRemap_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -118,6 +123,7 @@ namespace InfColorConvert
 
 			spToUserColor.Visibility = System.Windows.Visibility.Collapsed;
 			spToColorSpace.Visibility = System.Windows.Visibility.Collapsed;
+			spToColorTint.Visibility = System.Windows.Visibility.Collapsed;
 
 			switch (comboBox.SelectedIndex)
 			{
@@ -127,9 +133,17 @@ namespace InfColorConvert
 				case 1:
 					spToColorSpace.Visibility = System.Windows.Visibility.Visible;
 					break;
+				case 2:
+					spToColorTint.Visibility = System.Windows.Visibility.Visible;
+					break;
 				default:
 					break;
 			}
+		}
+
+		private void btnApply_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("apply");
 		}
 	}
 }
