@@ -19,40 +19,195 @@ namespace InfColorConvert
 {
 	public partial class DockerUI : UserControl
 	{
-		private delegate bool findDelegate(corel.Shape s);
-		private delegate void convertDelegate(corel.Shape s);
+		private delegate bool findDelegate(corel.Color c);
+		private delegate corel.Color convertDelegate(corel.Color c);
 
-		private corel.Color findColor = new corel.Color();
+		private findDelegate checkColor;
+		private convertDelegate convertColor;
+
+		private corel.Color colorRemapUserColor = new corel.Color();
+		private corel.Color colorToUserColor = new corel.Color();
 
 		private void Start()
 		{
-			findDelegate fd = RemapUserColor;
-			convertDelegate cd = ToUserColor;
+			switch (cbApplyRange.SelectedIndex)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				default:
+					break;
+			}
 
-			RemapShape(fd,cd,corelApp.ActivePage.Shapes.All());
+			RemapShapeInShapeRange(corelApp.ActivePage.Shapes.All());
 		}
 
-		private void RemapShape(findDelegate find, convertDelegate convert, corel.ShapeRange sr)
+		private void RemapShapeInShapeRange(corel.ShapeRange sr)
 		{
-			for (int i = 0; i < sr.Count; i++)
-				if (find(sr[i]))
-					convert(sr[i]);
+			foreach (corel.Shape s in sr)
+			{
+				if (s.Type == cdrShapeType.cdrGroupShape)
+					RemapInGroupShape(s);
+
+				if (s.PowerClip != null)
+					RemapInPowerClipShape(s);
+
+				switch (s.Type)
+				{
+					case cdrShapeType.cdr3DObjectShape:
+						break;
+					case cdrShapeType.cdrArtisticMediaGroupShape:
+						break;
+					case cdrShapeType.cdrBevelGroupShape:
+						break;
+					case cdrShapeType.cdrBitmapShape:
+						break;
+					case cdrShapeType.cdrBlendGroupShape:
+						break;
+					case cdrShapeType.cdrConnectorShape:
+						break;
+					case cdrShapeType.cdrContourGroupShape:
+						break;
+					case cdrShapeType.cdrCurveShape:
+						RemapCdrCurveShape(s);
+						break;
+					case cdrShapeType.cdrCustomEffectGroupShape:
+						break;
+					case cdrShapeType.cdrCustomShape:
+						break;
+					case cdrShapeType.cdrDropShadowGroupShape:
+						break;
+					case cdrShapeType.cdrEPSShape:
+						break;
+					case cdrShapeType.cdrEllipseShape:
+						break;
+					case cdrShapeType.cdrExtrudeGroupShape:
+						break;
+					//case cdrShapeType.cdrGroupShape:
+					//	break;
+					case cdrShapeType.cdrGuidelineShape:
+						break;
+					case cdrShapeType.cdrHTMLActiveObjectShape:
+						break;
+					case cdrShapeType.cdrHTMLFormObjectShape:
+						break;
+					case cdrShapeType.cdrLinearDimensionShape:
+						break;
+					case cdrShapeType.cdrMeshFillShape:
+						break;
+					case cdrShapeType.cdrNoShape:
+						break;
+					case cdrShapeType.cdrOLEObjectShape:
+						break;
+					case cdrShapeType.cdrPerfectShape:
+						break;
+					case cdrShapeType.cdrPolygonShape:
+						break;
+					case cdrShapeType.cdrRectangleShape:
+						break;
+					case cdrShapeType.cdrSelectionShape:
+						break;
+					case cdrShapeType.cdrSymbolShape:
+						break;
+					case cdrShapeType.cdrTextShape:
+						break;
+					default:
+						break;
+				}
+			}
 		}
 
-		#region find methods
+		private void RemapInGroupShape(corel.Shape s)
+		{
+			RemapShapeInShapeRange(s.Shapes.All());
+		}
 
-		private bool RemapUserColor(corel.Shape s)
+		private void RemapInPowerClipShape(corel.Shape s)
+		{
+			corel.ShapeRange sr = s.PowerClip.Shapes.All();
+			s.PowerClip.EnterEditMode();
+			RemapShapeInShapeRange(sr);
+			s.PowerClip.LeaveEditMode();
+		}
+
+		private void RemapCdrCurveShape(corel.Shape s)
+		{
+			if (s.CanHaveFill)
+			{
+				if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
+				{
+					if (checkColor(s.Fill.UniformColor))
+					{
+						s.Fill.UniformColor = convertColor(s.Fill.UniformColor);
+					}
+				}
+			}
+		}
+
+		#region check shape methods
+
+		private bool RemapUserColor(corel.Color c)
+		{
+			return c.IsSame(colorRemapUserColor);
+		}
+
+		private bool RemapImpureBlack(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapImpureGray(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorSpaceCMYK(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorSpaceRGB(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorSpaceGray(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorRangeCMYK(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorRangeRGB(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapColorRangeGray(corel.Color c)
+		{
+			return false;
+		}
+
+		private bool RemapAnyColor(corel.Color c)
 		{
 			return false;
 		}
 
 		#endregion
 
-		#region convert methods
+		#region convert shape methods
 
-		private void ToUserColor(corel.Shape s)
+		private corel.Color ToUserColor(corel.Color c)
 		{
-
+			return colorToUserColor;
 		}
 
 		#endregion

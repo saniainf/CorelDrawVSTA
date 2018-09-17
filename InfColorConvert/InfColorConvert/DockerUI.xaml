@@ -8,7 +8,7 @@
              MinWidth="235">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <StackPanel>
-            <TextBox Name="tbHelpTips" Width="auto" MinHeight="30" Padding="5" TextWrapping="Wrap" Text=""/>
+            <TextBox Name="tbHelpTips" Width="auto" MinHeight="30" Padding="5" TextWrapping="Wrap" IsReadOnly="True" Text=""/>
             <Label Content="Remap:" FontWeight="Bold" Margin="0,10,0,0"></Label>
             <!--выбор что ковертировать-->
             <ComboBox Name="cbRemap" Height="22" Margin="0,5,0,0" SelectionChanged="cbRemap_SelectionChanged">
@@ -27,9 +27,11 @@
                 <!--конвертировать пользовательский цвет-->
                 <StackPanel Name="spRemapUserColor" Margin="0,5,0,0">
                     <DockPanel Height="44">
-                        <Canvas Name="cnvRemapUserColorBar" Background="Gray" Width="44" Height="44"></Canvas>
+                        <Canvas Name="cnvRemapUserColorBar" Background="Gray" Width="44" Height="44">
+                            <Rectangle Width="44" Height="44" Stroke="DarkGray"></Rectangle>
+                        </Canvas>
                         <StackPanel>
-                            <Button Name="btnPickRemapUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0"></Button>
+                            <Button Name="btnPickRemapUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickRemapUserColor_Click"></Button>
                             <Label Name="lblRemapUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                         </StackPanel>
                     </DockPanel>
@@ -53,7 +55,7 @@
             </StackPanel>
             <!--конвертировать из цветового пространства-->
             <StackPanel Name="spRemapColorSpace" Margin="0,5,0,0">
-                <ComboBox Name="cbRemapColorSpaceType" Height="22">
+                <ComboBox Name="cbRemapColorSpaceType" Height="22" SelectionChanged="cbRemapColorSpaceType_SelectionChanged">
                     <TextBlock>CMYK</TextBlock>
                     <TextBlock>RGB</TextBlock>
                     <TextBlock>Gray</TextBlock>
@@ -160,17 +162,29 @@
                 </StackPanel>
                 <!--конвертировать из gray диапазона-->
                 <StackPanel Name="spRemapColorRangeGray" Margin="0,5,0,0">
-                    <DockPanel Height="22">
-                        <Label Content="Grey" Width="50" Padding="0" VerticalContentAlignment="Center"></Label>
-                        <Label Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="100"></local:IntTextBox>
-                        <Label Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMax" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Text="100"></local:IntTextBox>
-                        <Label Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <Button Width="22" Height="22" Margin="10,0,0,0" HorizontalAlignment="Left">
+                    <Grid Height="22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Gray" Padding="0" VerticalContentAlignment="Center"></Label>
+                        <Label Grid.Row="0" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
+                        <Label Grid.Row="0" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
+                        <Label Grid.Row="0" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
+                        <Button Grid.Row="0" Grid.Column="6" Width="22" Height="22" Margin="10,0,0,0">
                             <Image Source="pick.png" Width="17" Height="15" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Button>
-                    </DockPanel>
+                    </Grid>
                 </StackPanel>
             </StackPanel>
             <!--конвертировать любой цвет-->
@@ -190,16 +204,18 @@
             <!--конвертировать в цвет-->
             <StackPanel Name="spToUserColor" Margin="0,5,0,0">
                 <DockPanel Height="44">
-                    <Canvas Name="cnvToUserColorBar" Background="Gray" Width="44" Height="44"></Canvas>
+                    <Canvas Name="cnvToUserColorBar" Background="Gray" Width="44" Height="44">
+                        <Rectangle Width="44" Height="44" Stroke="DarkGray"></Rectangle>
+                    </Canvas>
                     <StackPanel>
-                        <Button Name="btnPickToUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0"></Button>
+                        <Button Name="btnPickToUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickToUserColor_Click"></Button>
                         <Label Name="lblToUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                     </StackPanel>
                 </DockPanel>
             </StackPanel>
             <!--конвертировать в цветовое пространство-->
             <StackPanel Name="spToColorSpace" Height="22" Margin="0,5,0,0">
-                <ComboBox Name="cbToColorSpaceType" Height="22" >
+                <ComboBox Name="cbToColorSpaceType" Height="22" SelectionChanged="cbToColorSpaceType_SelectionChanged" >
                     <TextBlock>CMYK</TextBlock>
                     <TextBlock>RGB</TextBlock>
                     <TextBlock>Gray</TextBlock>
