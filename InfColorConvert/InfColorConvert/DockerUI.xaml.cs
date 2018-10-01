@@ -28,8 +28,6 @@ namespace InfColorConvert
 			InitializeComponent();
 
 			//default
-			CheckColor = RemapUserColor;
-			ConvertColor = ToUserColor;
 
 			colorRemapUserColor.CMYKAssign(0, 0, 0, 0);
 			colorToUserColor.CMYKAssign(0, 0, 0, 100);
@@ -260,7 +258,6 @@ namespace InfColorConvert
 					switch (cbRemapColorType.SelectedIndex)
 					{
 						case 0:
-							CheckColor = RemapUserColor;
 							tbHelpTips.Text = "remap color";
 							break;
 						case 1:
@@ -315,7 +312,6 @@ namespace InfColorConvert
 			switch (cbTo.SelectedIndex)
 			{
 				case 0:
-					ConvertColor = ToUserColor;
 					tbHelpTips.Text = tbHelpTips.Text + " to color";
 					break;
 				case 1:

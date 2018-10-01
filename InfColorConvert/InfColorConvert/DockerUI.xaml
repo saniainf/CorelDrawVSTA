@@ -39,7 +39,7 @@
                 <!--конвертировать грязный черный-->
                 <StackPanel Name="spRemapImpureBlack" Margin="0,5,0,0">
                     <DockPanel Height="22">
-                        <Label Content="Color Limit Range:" Padding="0" VerticalContentAlignment="Center"></Label>
+                        <Label Content="Black Limit Range:" Padding="0" VerticalContentAlignment="Center"></Label>
                         <local:IntTextBox x:Name="tbRemapImpureBlackColorLimit" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Text="10"></local:IntTextBox>
                         <Label Content="%" Padding="0" VerticalContentAlignment="Center"></Label>
                     </DockPanel>

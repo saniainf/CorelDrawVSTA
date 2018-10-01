@@ -9,6 +9,6 @@ namespace InfColorConvert
 {
 	interface IConvertColor
 	{
-		corel.Color ConverColor(corel.Color color);
+		corel.Color Convert(corel.Color color);
 	}
 }

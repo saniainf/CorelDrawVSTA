@@ -9,6 +9,6 @@ namespace InfColorConvert
 {
 	interface ICheckColor
 	{
-		bool CheckColor(corel.Color color);
+		bool Check(corel.Color color);
 	}
 }

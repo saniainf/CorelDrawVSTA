@@ -50,6 +50,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckImpureBlack.cs" />
+    <Compile Include="CheckUserColor.cs" />
+    <Compile Include="ConvertUserColor.cs" />
+    <Compile Include="RemapShapeRange.cs" />
     <Page Include="DockerUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
