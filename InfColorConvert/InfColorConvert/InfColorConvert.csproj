@@ -65,6 +65,8 @@
   </ItemGroup>-->
   <ItemGroup>
     <Compile Include="DockerUI_backend.cs" />
+    <Compile Include="ICheckColor.cs" />
+    <Compile Include="IConvertColor.cs" />
     <Compile Include="IntTextBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

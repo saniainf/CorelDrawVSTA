@@ -14,22 +14,33 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
+using System.Diagnostics;
+using System.Threading;
 
 namespace InfColorConvert
 {
 	public partial class DockerUI : UserControl
 	{
-		private delegate bool findDelegate(corel.Color c);
-		private delegate corel.Color convertDelegate(corel.Color c);
+		Stopwatch stopwatch = new Stopwatch();
+		int ich;
 
-		private findDelegate checkColor;
-		private convertDelegate convertColor;
+		private delegate bool FindDelegate(corel.Color c);
+		private delegate corel.Color ConvertDelegate(corel.Color c);
+
+		private FindDelegate CheckColor;
+		private ConvertDelegate ConvertColor;
 
 		private corel.Color colorRemapUserColor = new corel.Color();
 		private corel.Color colorToUserColor = new corel.Color();
 
 		private void Start()
 		{
+			stopwatch.Reset();
+			ich = 0;
+			stopwatch.Start();
+
+			corelApp.Optimization = true;
+
 			switch (cbApplyRange.SelectedIndex)
 			{
 				case 0:
@@ -45,6 +56,14 @@ namespace InfColorConvert
 			}
 
 			RemapShapeInShapeRange(corelApp.ActivePage.Shapes.All());
+
+			corelApp.ActiveDocument.ClearSelection();
+			corelApp.Optimization = false;
+			corelApp.ActiveWindow.Refresh();
+			corelApp.Application.Refresh();
+
+			stopwatch.Stop();
+			MessageBox.Show("char count " + ich + " time " + stopwatch.ElapsedMilliseconds);
 		}
 
 		private void RemapShapeInShapeRange(corel.ShapeRange sr)
@@ -74,17 +93,19 @@ namespace InfColorConvert
 					case cdrShapeType.cdrContourGroupShape:
 						break;
 					case cdrShapeType.cdrCurveShape:
-						RemapCdrCurveShape(s);
+						RemapCdrSimpleShape(s);
 						break;
 					case cdrShapeType.cdrCustomEffectGroupShape:
 						break;
 					case cdrShapeType.cdrCustomShape:
+						//table
 						break;
 					case cdrShapeType.cdrDropShadowGroupShape:
 						break;
 					case cdrShapeType.cdrEPSShape:
 						break;
 					case cdrShapeType.cdrEllipseShape:
+						RemapCdrSimpleShape(s);
 						break;
 					case cdrShapeType.cdrExtrudeGroupShape:
 						break;
@@ -105,16 +126,20 @@ namespace InfColorConvert
 					case cdrShapeType.cdrOLEObjectShape:
 						break;
 					case cdrShapeType.cdrPerfectShape:
+						RemapCdrSimpleShape(s);
 						break;
 					case cdrShapeType.cdrPolygonShape:
+						RemapCdrSimpleShape(s);
 						break;
 					case cdrShapeType.cdrRectangleShape:
+						RemapCdrSimpleShape(s);
 						break;
 					case cdrShapeType.cdrSelectionShape:
 						break;
 					case cdrShapeType.cdrSymbolShape:
 						break;
 					case cdrShapeType.cdrTextShape:
+						RemapCdrTextShape(s);
 						break;
 					default:
 						break;
@@ -135,18 +160,99 @@ namespace InfColorConvert
 			s.PowerClip.LeaveEditMode();
 		}
 
-		private void RemapCdrCurveShape(corel.Shape s)
+		private void RemapCdrTextShape(corel.Shape s)
+		{
+			foreach (corel.TextRange tr in s.Text.Story.Characters)
+			{
+				ich++;
+
+				if (tr.Fill.Type == cdrFillType.cdrUniformFill)
+				{
+					if (CheckColor(tr.Fill.UniformColor))
+						tr.Fill.UniformColor = ConvertColor(tr.Fill.UniformColor);
+				}
+
+				if (tr.Fill.Type == cdrFillType.cdrFountainFill)
+				{
+					for (int i = 0; i < tr.Fill.Fountain.Colors.Count; i++)
+					{
+						if (CheckColor(tr.Fill.Fountain.Colors[i].Color))
+							tr.Fill.Fountain.Colors[i].Color = ConvertColor(tr.Fill.Fountain.Colors[i].Color);
+					}
+				}
+
+				if (tr.Outline.Type == cdrOutlineType.cdrOutline || tr.Outline.Type == cdrOutlineType.cdrEnhancedOutline)
+				{
+					if (CheckColor(tr.Outline.Color))
+						tr.Outline.Color = ConvertColor(tr.Outline.Color);
+				}
+			}
+		}
+
+		private void RemapCdrSimpleShape(corel.Shape s)
 		{
 			if (s.CanHaveFill)
 			{
-				if (s.Fill.Type == corel.cdrFillType.cdrUniformFill)
+				switch (s.Fill.Type)
 				{
-					if (checkColor(s.Fill.UniformColor))
-					{
-						s.Fill.UniformColor = convertColor(s.Fill.UniformColor);
-					}
+					case cdrFillType.cdrFountainFill:
+						RemapFountainFill(s);
+						break;
+					case cdrFillType.cdrHatchFill:
+						break;
+					case cdrFillType.cdrNoFill:
+						break;
+					case cdrFillType.cdrPatternFill:
+						break;
+					case cdrFillType.cdrPostscriptFill:
+						break;
+					case cdrFillType.cdrTextureFill:
+						break;
+					case cdrFillType.cdrUniformFill:
+						RemapUniformFill(s);
+						break;
+					default:
+						break;
 				}
 			}
+
+			if (s.CanHaveOutline)
+			{
+				switch (s.Outline.Type)
+				{
+					case cdrOutlineType.cdrEnhancedOutline:
+						RamapOutline(s);
+						break;
+					case cdrOutlineType.cdrNoOutline:
+						break;
+					case cdrOutlineType.cdrOutline:
+						RamapOutline(s);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private void RemapUniformFill(corel.Shape s)
+		{
+			if (CheckColor(s.Fill.UniformColor))
+				s.Fill.UniformColor = ConvertColor(s.Fill.UniformColor);
+		}
+
+		private void RemapFountainFill(corel.Shape s)
+		{
+			for (int i = 0; i < s.Fill.Fountain.Colors.Count; i++)
+			{
+				if (CheckColor(s.Fill.Fountain.Colors[i].Color))
+					s.Fill.Fountain.Colors[i].Color = ConvertColor(s.Fill.Fountain.Colors[i].Color);
+			}
+		}
+
+		private void RamapOutline(corel.Shape s)
+		{
+			if (CheckColor(s.Outline.Color))
+				s.Outline.Color = ConvertColor(s.Outline.Color);
 		}
 
 		#region check shape methods
