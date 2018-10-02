@@ -5,6 +5,7 @@ using System.Text;
 using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
 using System.Diagnostics;
+using System.Windows;
 
 namespace InfColorConvert
 {
@@ -12,12 +13,17 @@ namespace InfColorConvert
 	{
 		ICheckColor checkColor;
 		IConvertColor convertColor;
+		corel.ShapeRange shapeRange;
 
 		public RemapShapeRange(ICheckColor checkColor, IConvertColor convertColor, corel.ShapeRange shapeRange)
 		{
 			this.checkColor = checkColor;
 			this.convertColor = convertColor;
+			this.shapeRange = shapeRange;
+		}
 
+		public void Start()
+		{
 			RemapInShapeRange(shapeRange);
 		}
 
@@ -210,7 +216,7 @@ namespace InfColorConvert
 
 		private void RemapFountainFill(corel.FountainFill fill)
 		{
-			for (int i = 0; i <  fill.Colors.Count; i++)
+			for (int i = 0; i < fill.Colors.Count; i++)
 			{
 				if (checkColor.Check(fill.Colors[i].Color))
 					fill.Colors[i].Color = convertColor.Convert(fill.Colors[i].Color);

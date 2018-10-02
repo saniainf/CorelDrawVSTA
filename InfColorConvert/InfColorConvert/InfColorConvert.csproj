@@ -50,8 +50,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckAnyColor.cs" />
+    <Compile Include="CheckColorSpaceCMYK.cs" />
+    <Compile Include="CheckColorSpaceGray.cs" />
+    <Compile Include="CheckColorSpacePantone.cs" />
+    <Compile Include="CheckColorSpaceRGB.cs" />
     <Compile Include="CheckImpureBlack.cs" />
+    <Compile Include="CheckImpureGray.cs" />
+    <Compile Include="CheckNoneColor.cs" />
     <Compile Include="CheckUserColor.cs" />
+    <Compile Include="ConvertColorSpaceCMYK.cs" />
+    <Compile Include="ConvertColorSpaceCMYKPantone.cs" />
+    <Compile Include="ConvertColorSpaceGray.cs" />
+    <Compile Include="ConvertColorSpaceRGB.cs" />
+    <Compile Include="ConvertKeepColor.cs" />
     <Compile Include="ConvertUserColor.cs" />
     <Compile Include="RemapShapeRange.cs" />
     <Page Include="DockerUI.xaml">

@@ -40,7 +40,7 @@
                 <StackPanel Name="spRemapImpureBlack" Margin="0,5,0,0">
                     <DockPanel Height="22">
                         <Label Content="Black Limit Range:" Padding="0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapImpureBlackColorLimit" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Text="10"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapImpureBlackColorLimit" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Value="5"></local:IntTextBox>
                         <Label Content="%" Padding="0" VerticalContentAlignment="Center"></Label>
                     </DockPanel>
                 </StackPanel>
@@ -48,7 +48,7 @@
                 <StackPanel Name="spRemapImpureGray" Margin="0,5,0,0">
                     <DockPanel Height="22">
                         <Label Content="Color Limit Range:" Padding="0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapImpureGrayColorLimit" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Text="10"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapImpureGrayColorLimit" Width="27" Margin="5,0,5,0" VerticalContentAlignment="Center" Value="10"></local:IntTextBox>
                         <Label Content="%" Padding="0" VerticalContentAlignment="Center"></Label>
                     </DockPanel>
                 </StackPanel>
@@ -59,6 +59,7 @@
                     <TextBlock>CMYK</TextBlock>
                     <TextBlock>RGB</TextBlock>
                     <TextBlock>Gray</TextBlock>
+                    <TextBlock>Pantone</TextBlock>
                 </ComboBox>
             </StackPanel>
             <!--конвертировать из цветового диапазона-->
@@ -217,8 +218,10 @@
             <StackPanel Name="spToColorSpace" Height="22" Margin="0,5,0,0">
                 <ComboBox Name="cbToColorSpaceType" Height="22" SelectionChanged="cbToColorSpaceType_SelectionChanged" >
                     <TextBlock>CMYK</TextBlock>
+                    <TextBlock>CMYK + Pantone</TextBlock>
                     <TextBlock>RGB</TextBlock>
                     <TextBlock>Gray</TextBlock>
+                    <TextBlock>Pantone</TextBlock>
                 </ComboBox>
             </StackPanel>
             <!--конвертировать в оттенок цвета-->

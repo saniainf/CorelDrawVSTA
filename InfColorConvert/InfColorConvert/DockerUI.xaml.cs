@@ -72,8 +72,6 @@ namespace InfColorConvert
 				default:
 					break;
 			}
-
-			PickConvertMode();
 		}
 
 		private void cbRemapColorType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -98,13 +96,11 @@ namespace InfColorConvert
 				default:
 					break;
 			}
-
-			PickConvertMode();
 		}
 
 		private void cbRemapColorSpaceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			PickConvertMode();
+
 		}
 
 		private void cbRemapColorRangeType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -129,8 +125,6 @@ namespace InfColorConvert
 				default:
 					break;
 			}
-
-			PickConvertMode();
 		}
 
 		private void cbTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -155,13 +149,11 @@ namespace InfColorConvert
 				default:
 					break;
 			}
-
-			PickConvertMode();
 		}
 
 		private void cbToColorSpaceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			PickConvertMode();
+			
 		}
 
 		#endregion
@@ -216,7 +208,7 @@ namespace InfColorConvert
 					name = string.Format("H:{0} S:{1} B:{2}", c.HSBHue, c.HSBSaturation, c.HSBBrightness);
 					break;
 				case cdrColorType.cdrColorLab:
-					name = string.Format("L:{0} A:{1} B:{2}", c.LabLuminance, c.LabComponentA, c.LabComponentB);
+					name = string.Format("L:{0} a:{1} b:{2}", c.LabLuminance, c.LabComponentA, c.LabComponentB);
 					break;
 				case cdrColorType.cdrColorMixed:
 					break;
@@ -247,95 +239,6 @@ namespace InfColorConvert
 					break;
 			}
 			return name;
-		}
-
-		//адище
-		private void PickConvertMode()
-		{
-			switch (cbRemap.SelectedIndex)
-			{
-				case 0:
-					switch (cbRemapColorType.SelectedIndex)
-					{
-						case 0:
-							tbHelpTips.Text = "remap color";
-							break;
-						case 1:
-							tbHelpTips.Text = "remap impure black";
-							break;
-						case 2:
-							tbHelpTips.Text = "remap impure gray";
-							break;
-						default:
-							break;
-					}
-					break;
-				case 1:
-					switch (cbRemapColorSpaceType.SelectedIndex)
-					{
-						case 0:
-							tbHelpTips.Text = "remap color space cmyk";
-							break;
-						case 1:
-							tbHelpTips.Text = "remap color space rgb";
-							break;
-						case 2:
-							tbHelpTips.Text = "remap color space gray";
-							break;
-						default:
-							break;
-					}
-					break;
-				case 2:
-					switch (cbRemapColorRangeType.SelectedIndex)
-					{
-						case 0:
-							tbHelpTips.Text = "remap cmyk range";
-							break;
-						case 1:
-							tbHelpTips.Text = "remap rgb range";
-							break;
-						case 2:
-							tbHelpTips.Text = "remap gray range";
-							break;
-						default:
-							break;
-					}
-					break;
-				case 3:
-					tbHelpTips.Text = "remap any color";
-					break;
-				default:
-					break;
-			}
-
-			switch (cbTo.SelectedIndex)
-			{
-				case 0:
-					tbHelpTips.Text = tbHelpTips.Text + " to color";
-					break;
-				case 1:
-					switch (cbToColorSpaceType.SelectedIndex)
-					{
-						case 0:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space cmyk";
-							break;
-						case 1:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space rgb";
-							break;
-						case 2:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space gray";
-							break;
-						default:
-							break;
-					}
-					break;
-				case 2:
-					tbHelpTips.Text = tbHelpTips.Text + " to color tint";
-					break;
-				default:
-					break;
-			}
 		}
 	}
 }

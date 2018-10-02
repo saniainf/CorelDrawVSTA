@@ -22,7 +22,6 @@ namespace InfColorConvert
 	public partial class DockerUI : UserControl
 	{
 		Stopwatch stopwatch = new Stopwatch();
-		int ich;
 
 		private corel.Color colorRemapUserColor = new corel.Color();
 		private corel.Color colorToUserColor = new corel.Color();
@@ -30,7 +29,6 @@ namespace InfColorConvert
 		private void Start()
 		{
 			stopwatch.Reset();
-			ich = 0;
 			stopwatch.Start();
 
 			corelApp.Optimization = true;
@@ -49,11 +47,119 @@ namespace InfColorConvert
 					break;
 			}
 
-			//CheckUserColor checkUserC = new CheckUserColor(colorRemapUserColor);
-			CheckImpureBlack checkImpureBlack = new CheckImpureBlack(10);
-			ConvertUserColor convertUserC = new ConvertUserColor(colorToUserColor);
+			ICheckColor check = (ICheckColor)new CheckNoneColor();
+			IConvertColor convert = (IConvertColor)new ConvertKeepColor();
 
-			RemapShapeRange remapShapeRange = new RemapShapeRange(checkImpureBlack as ICheckColor, convertUserC as IConvertColor, corelApp.ActivePage.Shapes.All());
+			switch (cbRemap.SelectedIndex)
+			{
+				case 0:
+					switch (cbRemapColorType.SelectedIndex)
+					{
+						case 0:
+							tbHelpTips.Text = "remap color";
+							check = (ICheckColor)new CheckUserColor(colorRemapUserColor);
+							break;
+						case 1:
+							tbHelpTips.Text = "remap impure black";
+							check = (ICheckColor)new CheckImpureBlack(tbRemapImpureBlackColorLimit.Value);
+							break;
+						case 2:
+							tbHelpTips.Text = "remap impure gray";
+							check = (ICheckColor)new CheckImpureGray(tbRemapImpureGrayColorLimit.Value);
+							break;
+						default:
+							break;
+					}
+					break;
+				case 1:
+					switch (cbRemapColorSpaceType.SelectedIndex)
+					{
+						case 0:
+							tbHelpTips.Text = "remap color space cmyk";
+							check = (ICheckColor)new CheckColorSpaceCMYK();
+							break;
+						case 1:
+							tbHelpTips.Text = "remap color space rgb";
+							check = (ICheckColor)new CheckColorSpaceRGB();
+							break;
+						case 2:
+							tbHelpTips.Text = "remap color space gray";
+							check = (ICheckColor)new CheckColorSpaceGray();
+							break;
+						case 3:
+							tbHelpTips.Text = "remap color space pantone";
+							check = (ICheckColor)new CheckColorSpacePantone();
+							break;
+						default:
+							break;
+					}
+					break;
+				case 2:
+					switch (cbRemapColorRangeType.SelectedIndex)
+					{
+						case 0:
+							tbHelpTips.Text = "remap cmyk range";
+							break;
+						case 1:
+							tbHelpTips.Text = "remap rgb range";
+							break;
+						case 2:
+							tbHelpTips.Text = "remap gray range";
+							break;
+						default:
+							break;
+					}
+					break;
+				case 3:
+					tbHelpTips.Text = "remap any color";
+					check = (ICheckColor)new CheckAnyColor();
+					break;
+				default:
+					break;
+			}
+
+			switch (cbTo.SelectedIndex)
+			{
+				case 0:
+					tbHelpTips.Text = tbHelpTips.Text + " to color";
+					convert = (IConvertColor)new ConvertUserColor(colorToUserColor);
+					break;
+				case 1:
+					switch (cbToColorSpaceType.SelectedIndex)
+					{
+						case 0:
+							tbHelpTips.Text = tbHelpTips.Text + " to color space cmyk";
+							convert = (IConvertColor)new ConvertColorSpaceCMYK();
+							break;
+						case 1:
+							tbHelpTips.Text = tbHelpTips.Text + " to color space cmyk + pantone";
+							convert = (IConvertColor)new ConvertColorSpaceCMYKPantone();
+							break;
+						case 2:
+							tbHelpTips.Text = tbHelpTips.Text + " to color space rgb";
+							convert = (IConvertColor)new ConvertColorSpaceRGB();
+							break;
+						case 3:
+							tbHelpTips.Text = tbHelpTips.Text + " to color space gray";
+							convert = (IConvertColor)new ConvertColorSpaceGray();
+							break;
+						case 4:
+							tbHelpTips.Text = tbHelpTips.Text + " to color space pantone";
+
+							break;
+						default:
+							break;
+					}
+					break;
+				case 2:
+					tbHelpTips.Text = tbHelpTips.Text + " to color tint";
+					break;
+				default:
+					break;
+			}
+
+			RemapShapeRange remapShapeRange = new RemapShapeRange(check, convert, corelApp.ActivePage.Shapes.All());
+			remapShapeRange.Start();
 
 			corelApp.ActiveDocument.ClearSelection();
 			corelApp.Optimization = false;
@@ -61,7 +167,7 @@ namespace InfColorConvert
 			corelApp.Application.Refresh();
 
 			stopwatch.Stop();
-			MessageBox.Show("char count " + ich + " time " + stopwatch.ElapsedMilliseconds);
+			//MessageBox.Show(stopwatch.ElapsedMilliseconds);
 		}
 	}
 }
