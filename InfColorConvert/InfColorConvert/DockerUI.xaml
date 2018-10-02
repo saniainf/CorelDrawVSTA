@@ -242,7 +242,22 @@
             </StackPanel>
 
             <Separator Margin="0,15,0,0"></Separator>
-
+            <!--к чему применять-->
+            <Label Content="Options:" FontWeight="Bold" Margin="0,10,0,0"></Label>
+            <StackPanel Margin="0,5,0,0">
+                <DockPanel>
+                    <Label Content="Apply to:" Padding="0"></Label>
+                    <CheckBox Name="chbApplyFill" Content="Fill" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True" Checked="chbApplyTo_Checked"></CheckBox>
+                    <CheckBox Name="chbApplyOutline" Content="Outline" VerticalAlignment="Center" Margin="20,0,0,0" IsChecked="True"></CheckBox>
+                </DockPanel>
+                <DockPanel Margin="0,10,0,0">
+                    <Label Content="Text as:" Padding="0"></Label>
+                    <RadioButton GroupName="groupTextAs" Content="Story" VerticalAlignment="Center" Margin="18,0,0,0" IsChecked="True"></RadioButton>
+                    <RadioButton GroupName="groupTextAs" Content="Character" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
+                </DockPanel>
+            </StackPanel>
+            
+            <Separator Margin="0,15,0,0" Background="Black"></Separator>
             <!--применить-->
             <DockPanel Margin="0,20,0,0">
                 <ComboBox Name="cbApplyRange" Height="22" Width="130">

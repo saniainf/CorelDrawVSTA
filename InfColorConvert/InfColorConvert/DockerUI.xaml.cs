@@ -170,6 +170,11 @@ namespace InfColorConvert
 			UpdateColorBar();
 		}
 
+		private void chbApplyTo_Checked(object sender, RoutedEventArgs e)
+		{
+
+		}
+
 		private void btnApply_Click(object sender, RoutedEventArgs e)
 		{
 			Start();
