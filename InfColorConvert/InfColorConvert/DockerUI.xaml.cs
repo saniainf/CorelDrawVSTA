@@ -22,6 +22,13 @@ namespace InfColorConvert
 	{
 		private corel.Application corelApp;
 
+		private corel.Color colorRemapUserColor = new corel.Color();
+		private corel.Color colorToUserColor = new corel.Color();
+
+		private int[] rangeRemapColorRangeCMYK = new int[8] { 50, 50, 50, 50, 50, 50, 50, 50 };
+		private int[] rangeRemapColorRangeRGB = new int[6] { 50, 50, 50, 50, 50, 50 };
+		private int[] rangeRemapColorRangeGray = new int[2] { 50, 50 };
+
 		public DockerUI(corel.Application app)
 		{
 			this.corelApp = app;
@@ -153,7 +160,7 @@ namespace InfColorConvert
 
 		private void cbToColorSpaceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			
+
 		}
 
 		#endregion
@@ -168,6 +175,30 @@ namespace InfColorConvert
 		{
 			colorToUserColor.UserAssign();
 			UpdateColorBar();
+		}
+
+
+		private void btnPickColorRemapColorRangeCMYK_Click(object sender, RoutedEventArgs e)
+		{
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
+
+				if (c.Type != cdrColorType.cdrColorCMYK)
+					c.ConvertToCMYK();
+
+				tbRemapColorRangeCyanMin.Value = Math.Min(c.CMYKCyan, tbRemapColorRangeCyanMin.Value);
+				tbRemapColorRangeMagentaMin.Value = Math.Min(c.CMYKMagenta, tbRemapColorRangeMagentaMin.Value);
+				tbRemapColorRangeYellowMin.Value = Math.Min(c.CMYKYellow, tbRemapColorRangeYellowMin.Value);
+				tbRemapColorRangeBlackMin.Value = Math.Min(c.CMYKBlack, tbRemapColorRangeBlackMin.Value);
+
+				tbRemapColorRangeCyanMax.Value = Math.Max(c.CMYKCyan, tbRemapColorRangeCyanMax.Value);
+				tbRemapColorRangeMagentaMax.Value = Math.Max(c.CMYKMagenta, tbRemapColorRangeMagentaMax.Value);
+				tbRemapColorRangeYellowMax.Value = Math.Max(c.CMYKYellow, tbRemapColorRangeYellowMax.Value);
+				tbRemapColorRangeBlackMax.Value = Math.Max(c.CMYKBlack, tbRemapColorRangeBlackMax.Value);
+			}
 		}
 
 		private void chbApplyTo_Checked(object sender, RoutedEventArgs e)

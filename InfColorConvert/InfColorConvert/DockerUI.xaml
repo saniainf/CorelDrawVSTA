@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfColorConvert"
+             
              mc:Ignorable="d" 
              MinWidth="235">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
@@ -98,23 +99,23 @@
                         <Label Grid.Row="2" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="6" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeCyanMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeMagentaMin" Grid.Row="2" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="88"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeYellowMin" Grid.Row="4" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="33"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeBlackMin" Grid.Row="6" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="9"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeCyanMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeMagentaMin" Grid.Row="2" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeYellowMin" Grid.Row="4" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeBlackMin" Grid.Row="6" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="2" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="6" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeCyanMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeMagentaMax" Grid.Row="2" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="88"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeYellowMax" Grid.Row="4" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="33"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeBlackMax" Grid.Row="6" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="9"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeCyanMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeMagentaMax" Grid.Row="2" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeYellowMax" Grid.Row="4" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeBlackMax" Grid.Row="6" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="2" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="6" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <Button Grid.Row="0" Grid.Column="6" Width="22" Height="22" Margin="10,0,0,0">
+                        <Button Name="btnPickColorRemapColorRangeCMYK" Grid.Row="0" Grid.Column="6" Width="22" Height="22" Margin="10,0,0,0" Click="btnPickColorRemapColorRangeCMYK_Click" ToolTip="ctrl - minus color, alt - plus color">
                             <Image Source="pick.png" Width="17" Height="15" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
                         </Button>
                     </Grid>
@@ -144,15 +145,15 @@
                         <Label Grid.Row="0" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="2" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeRedMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGreenMin" Grid.Row="2" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="88"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeBlueMin" Grid.Row="4" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="33"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeRedMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGreenMin" Grid.Row="2" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeBlueMin" Grid.Row="4" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="2" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeRedMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGreenMax" Grid.Row="2" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="88"></local:IntTextBox>
-                        <local:IntTextBox x:Name="tbRemapColorRangeBlueMax" Grid.Row="4" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="33"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeRedMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGreenMax" Grid.Row="2" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeBlueMax" Grid.Row="4" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="2" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="4" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
@@ -178,9 +179,9 @@
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Gray" Padding="0" VerticalContentAlignment="Center"></Label>
                         <Label Grid.Row="0" Grid.Column="1" Content="From:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMin" Grid.Row="0" Grid.Column="2" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="3" Content="To:" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
-                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="100"></local:IntTextBox>
+                        <local:IntTextBox x:Name="tbRemapColorRangeGrayMax" Grid.Row="0" Grid.Column="4" Width="27" Margin="5,0,0,0" VerticalContentAlignment="Center" Text="50"></local:IntTextBox>
                         <Label Grid.Row="0" Grid.Column="5" Content="%" Padding="0" Margin="5,0,0,0" VerticalContentAlignment="Center"></Label>
                         <Button Grid.Row="0" Grid.Column="6" Width="22" Height="22" Margin="10,0,0,0">
                             <Image Source="pick.png" Width="17" Height="15" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
@@ -256,7 +257,7 @@
                     <RadioButton GroupName="groupTextAs" Content="Character" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
                 </DockPanel>
             </StackPanel>
-            
+
             <Separator Margin="0,15,0,0" Background="Black"></Separator>
             <!--применить-->
             <DockPanel Margin="0,20,0,0">

@@ -53,7 +53,7 @@ namespace InfColorConvert
 			if (int.TryParse(s, out result))
 			{
 				result = Math.Min(result, 100);
-				result = Math.Max(result, 1);
+				result = Math.Max(result, 0);
 				this.Text = result.ToString();
 			}
 			else

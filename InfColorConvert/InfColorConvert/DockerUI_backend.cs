@@ -23,9 +23,6 @@ namespace InfColorConvert
 	{
 		Stopwatch stopwatch = new Stopwatch();
 
-		private corel.Color colorRemapUserColor = new corel.Color();
-		private corel.Color colorToUserColor = new corel.Color();
-
 		private void Start()
 		{
 			stopwatch.Reset();

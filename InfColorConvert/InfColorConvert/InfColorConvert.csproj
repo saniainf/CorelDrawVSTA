@@ -50,21 +50,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckAnyColor.cs" />
-    <Compile Include="CheckColorSpaceCMYK.cs" />
-    <Compile Include="CheckColorSpaceGray.cs" />
-    <Compile Include="CheckColorSpacePantone.cs" />
-    <Compile Include="CheckColorSpaceRGB.cs" />
-    <Compile Include="CheckImpureBlack.cs" />
-    <Compile Include="CheckImpureGray.cs" />
-    <Compile Include="CheckNoneColor.cs" />
-    <Compile Include="CheckUserColor.cs" />
-    <Compile Include="ConvertColorSpaceCMYK.cs" />
-    <Compile Include="ConvertColorSpaceCMYKPantone.cs" />
-    <Compile Include="ConvertColorSpaceGray.cs" />
-    <Compile Include="ConvertColorSpaceRGB.cs" />
-    <Compile Include="ConvertKeepColor.cs" />
-    <Compile Include="ConvertUserColor.cs" />
+    <Compile Include="Check\CheckAnyColor.cs" />
+    <Compile Include="Check\CheckColorSpaceCMYK.cs" />
+    <Compile Include="Check\CheckColorSpaceGray.cs" />
+    <Compile Include="Check\CheckColorSpacePantone.cs" />
+    <Compile Include="Check\CheckColorSpaceRGB.cs" />
+    <Compile Include="Check\CheckImpureBlack.cs" />
+    <Compile Include="Check\CheckImpureGray.cs" />
+    <Compile Include="Check\CheckNoneColor.cs" />
+    <Compile Include="Check\CheckUserColor.cs" />
+    <Compile Include="Convert\ConvertColorSpaceCMYK.cs" />
+    <Compile Include="Convert\ConvertColorSpaceCMYKPantone.cs" />
+    <Compile Include="Convert\ConvertColorSpaceGray.cs" />
+    <Compile Include="Convert\ConvertColorSpaceRGB.cs" />
+    <Compile Include="Convert\ConvertKeepColor.cs" />
+    <Compile Include="Convert\ConvertUserColor.cs" />
     <Compile Include="RemapShapeRange.cs" />
     <Page Include="DockerUI.xaml">
       <Generator>MSBuild:Compile</Generator>
