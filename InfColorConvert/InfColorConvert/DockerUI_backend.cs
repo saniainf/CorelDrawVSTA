@@ -96,12 +96,27 @@ namespace InfColorConvert
 					{
 						case 0:
 							tbHelpTips.Text = "remap cmyk range";
+							check = (ICheckColor)new CheckColorRangeCMYK(tbRemapColorRangeCyanMin.Value,
+																		tbRemapColorRangeCyanMax.Value,
+																		tbRemapColorRangeMagentaMin.Value,
+																		tbRemapColorRangeMagentaMax.Value,
+																		tbRemapColorRangeYellowMin.Value,
+																		tbRemapColorRangeYellowMax.Value,
+																		tbRemapColorRangeBlackMin.Value,
+																		tbRemapColorRangeBlackMax.Value);
 							break;
 						case 1:
 							tbHelpTips.Text = "remap rgb range";
+							check = (ICheckColor)new CheckColorRangeRGB(tbRemapColorRangeRedMin.Value,
+																		tbRemapColorRangeRedMax.Value,
+																		tbRemapColorRangeGreenMin.Value,
+																		tbRemapColorRangeGreenMax.Value,
+																		tbRemapColorRangeBlueMin.Value,
+																		tbRemapColorRangeBlueMax.Value);
 							break;
 						case 2:
 							tbHelpTips.Text = "remap gray range";
+							check = (ICheckColor)new CheckColorRangeGray(tbRemapColorRangeGrayMin.Value, tbRemapColorRangeGrayMax.Value);
 							break;
 						default:
 							break;
@@ -150,6 +165,7 @@ namespace InfColorConvert
 					break;
 				case 2:
 					tbHelpTips.Text = tbHelpTips.Text + " to color tint";
+					convert = (IConvertColor)new ConvertColorTint(fountainColorTint);
 					break;
 				default:
 					break;

@@ -12,6 +12,8 @@ namespace InfColorConvert
 {
 	class IntTextBox : TextBox
 	{
+		private int max = 100;
+		private int min = 0;
 		private Regex numRegEx = new Regex(@"[^0-9]+");
 		private int indecValue = 1;
 
@@ -29,6 +31,18 @@ namespace InfColorConvert
 			set { this.Text = value.ToString(); }
 		}
 
+		public int MinValue
+		{
+			get { return min; }
+			set { min = value; }
+		}
+
+		public int MaxValue
+		{
+			get { return max; }
+			set { max = value; }
+		}
+
 		static IntTextBox()
 		{
 
@@ -43,6 +57,7 @@ namespace InfColorConvert
 
 		protected override void OnGotFocus(RoutedEventArgs e)
 		{
+			SelectAll();
 			base.OnGotFocus(e);
 		}
 
@@ -52,8 +67,8 @@ namespace InfColorConvert
 			string s = Regex.Replace(this.Text, @"[^0-9]+", "", RegexOptions.Compiled);
 			if (int.TryParse(s, out result))
 			{
-				result = Math.Min(result, 100);
-				result = Math.Max(result, 0);
+				result = Math.Min(result, max);
+				result = Math.Max(result, min);
 				this.Text = result.ToString();
 			}
 			else
@@ -79,7 +94,7 @@ namespace InfColorConvert
 			string s = Regex.Replace(this.Text, @"[^0-9]+", "", RegexOptions.Compiled);
 			int.TryParse(s, out result);
 			//result = Math.Round(result);
-			result = Math.Min(result + indecValue, 100);
+			result = Math.Min(result + indecValue, max);
 			this.Text = result.ToString();
 		}
 
@@ -89,7 +104,7 @@ namespace InfColorConvert
 			string s = Regex.Replace(this.Text, @"[^0-9]+", "", RegexOptions.Compiled);
 			int.TryParse(s, out result);
 			//result = Math.Round(result);
-			result = Math.Max(result - indecValue, 1);
+			result = Math.Max(result - indecValue, min);
 			this.Text = result.ToString();
 		}
 	}

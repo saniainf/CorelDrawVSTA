@@ -24,10 +24,7 @@ namespace InfColorConvert
 
 		private corel.Color colorRemapUserColor = new corel.Color();
 		private corel.Color colorToUserColor = new corel.Color();
-
-		private int[] rangeRemapColorRangeCMYK = new int[8] { 50, 50, 50, 50, 50, 50, 50, 50 };
-		private int[] rangeRemapColorRangeRGB = new int[6] { 50, 50, 50, 50, 50, 50 };
-		private int[] rangeRemapColorRangeGray = new int[2] { 50, 50 };
+		private corel.Color[] fountainColorTint = new corel.Color[101];
 
 		public DockerUI(corel.Application app)
 		{
@@ -49,6 +46,14 @@ namespace InfColorConvert
 			cbToColorSpaceType.SelectedIndex = 0;
 
 			cbApplyRange.SelectedIndex = 0;
+
+			chbApplyFill.IsChecked = true;
+			chbApplyOutline.IsChecked = true;
+
+			for (int i = 0; i < fountainColorTint.Count(); i++)
+			{
+				fountainColorTint[i] = corelApp.CreateCMYKColor(0, 0, 0, i);
+			}
 		}
 
 		#region combobox events
@@ -189,6 +194,25 @@ namespace InfColorConvert
 				if (c.Type != cdrColorType.cdrColorCMYK)
 					c.ConvertToCMYK();
 
+				tbRemapColorRangeCyanMin.Value = c.CMYKCyan;
+				tbRemapColorRangeCyanMax.Value = c.CMYKCyan;
+				tbRemapColorRangeMagentaMin.Value = c.CMYKMagenta;
+				tbRemapColorRangeMagentaMax.Value = c.CMYKMagenta;
+				tbRemapColorRangeYellowMin.Value = c.CMYKYellow;
+				tbRemapColorRangeYellowMax.Value = c.CMYKYellow;
+				tbRemapColorRangeBlackMin.Value = c.CMYKBlack;
+				tbRemapColorRangeBlackMax.Value = c.CMYKBlack;
+			}
+
+			else
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
+
+				if (c.Type != cdrColorType.cdrColorCMYK)
+					c.ConvertToCMYK();
+
 				tbRemapColorRangeCyanMin.Value = Math.Min(c.CMYKCyan, tbRemapColorRangeCyanMin.Value);
 				tbRemapColorRangeMagentaMin.Value = Math.Min(c.CMYKMagenta, tbRemapColorRangeMagentaMin.Value);
 				tbRemapColorRangeYellowMin.Value = Math.Min(c.CMYKYellow, tbRemapColorRangeYellowMin.Value);
@@ -201,9 +225,138 @@ namespace InfColorConvert
 			}
 		}
 
-		private void chbApplyTo_Checked(object sender, RoutedEventArgs e)
+		private void btnPickColorRemapColorRangeRGB_Click(object sender, RoutedEventArgs e)
 		{
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
 
+				if (c.Type != cdrColorType.cdrColorRGB)
+					c.ConvertToRGB();
+
+				tbRemapColorRangeRedMin.Value = c.RGBRed;
+				tbRemapColorRangeRedMax.Value = c.RGBRed;
+				tbRemapColorRangeGreenMin.Value = c.RGBGreen;
+				tbRemapColorRangeGreenMax.Value = c.RGBGreen;
+				tbRemapColorRangeBlueMin.Value = c.RGBBlue;
+				tbRemapColorRangeBlueMax.Value = c.RGBBlue;
+			}
+
+			else
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
+
+				if (c.Type != cdrColorType.cdrColorRGB)
+					c.ConvertToRGB();
+
+				tbRemapColorRangeRedMin.Value = Math.Min(c.RGBRed, tbRemapColorRangeRedMin.Value);
+				tbRemapColorRangeGreenMin.Value = Math.Min(c.RGBGreen, tbRemapColorRangeGreenMin.Value);
+				tbRemapColorRangeBlueMin.Value = Math.Min(c.RGBBlue, tbRemapColorRangeBlueMin.Value);
+
+				tbRemapColorRangeRedMax.Value = Math.Max(c.RGBRed, tbRemapColorRangeRedMax.Value);
+				tbRemapColorRangeGreenMax.Value = Math.Max(c.RGBGreen, tbRemapColorRangeGreenMax.Value);
+				tbRemapColorRangeBlueMax.Value = Math.Max(c.RGBBlue, tbRemapColorRangeBlueMax.Value);
+			}
+		}
+
+		private void btnPickColorRemapColorRangeGray_Click(object sender, RoutedEventArgs e)
+		{
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
+
+				if (c.Type != cdrColorType.cdrColorGray)
+					c.ConvertToGray();
+
+				tbRemapColorRangeGrayMin.Value = c.Gray;
+				tbRemapColorRangeGrayMax.Value = c.Gray;
+			}
+
+			else
+			{
+				corel.Color c = new corel.Color();
+				if (!c.UserAssignEx())
+					return;
+
+				if (c.Type != cdrColorType.cdrColorGray)
+					c.ConvertToGray();
+
+				tbRemapColorRangeGrayMin.Value = Math.Min(c.Gray, tbRemapColorRangeGrayMin.Value);
+
+				tbRemapColorRangeGrayMax.Value = Math.Max(c.Gray, tbRemapColorRangeGrayMax.Value);
+			}
+		}
+
+		private void btnGrabColorToColorTint_Click(object sender, RoutedEventArgs e)
+		{
+			corel.Shape s = corelApp.ActiveSelection;
+			if (s == null || s.Shapes.Count > 1 || s.Fill.Type != cdrFillType.cdrFountainFill)
+				return;
+
+			corel.FountainFill ff = s.Fill.Fountain;
+
+			for (int i = 1; i < ff.Colors.Count; i++)
+			{
+				corel.FountainColor startFC = ff.Colors[i - 1];
+				corel.FountainColor endFC = ff.Colors[i];
+				int posStart = startFC.Position;
+				int posEnd = endFC.Position;
+				corel.Color startC = startFC.Color;
+				corel.Color endC = endFC.Color;
+
+				for (int j = posStart; j <= posEnd; j++)
+				{
+					int cyan = (int)Math.Floor((double)(startC.CMYKCyan + (endC.CMYKCyan - startC.CMYKCyan) * (j - posStart) / (posEnd - posStart)));
+					int magenta = (int)Math.Floor((double)(startC.CMYKMagenta + (endC.CMYKMagenta - startC.CMYKMagenta) * (j - posStart) / (posEnd - posStart)));
+					int yellow = (int)Math.Floor((double)(startC.CMYKYellow + (endC.CMYKYellow - startC.CMYKYellow) * (j - posStart) / (posEnd - posStart)));
+					int black = (int)Math.Floor((double)(startC.CMYKBlack + (endC.CMYKBlack - startC.CMYKBlack) * (j - posStart) / (posEnd - posStart)));
+
+					fountainColorTint[j].CMYKAssign(cyan, magenta, yellow, black);
+				}
+			}
+
+			cnvToColorSpaceColorBar.Background = ConvertFromFountain(ff);
+		}
+
+		private LinearGradientBrush ConvertFromFountain(corel.FountainFill ff)
+		{
+			LinearGradientBrush lgBrush = new LinearGradientBrush();
+			lgBrush.StartPoint = new System.Windows.Point(0, 0.5);
+			lgBrush.EndPoint = new System.Windows.Point(1, 0.5);
+
+			foreach (corel.FountainColor fc in ff.Colors)
+			{
+				corel.Color c = new corel.Color();
+				c.CopyAssign(fc.Color);
+				c.ConvertToRGB();
+				float pos = fc.Position;
+
+				System.Windows.Media.Color bc = System.Windows.Media.Color.FromRgb((byte)c.RGBRed, (byte)c.RGBGreen, (byte)c.RGBBlue);
+
+				GradientStop gs = new GradientStop(bc, pos / 100f);
+
+				lgBrush.GradientStops.Add(gs);
+			}
+
+			return lgBrush;
+		}
+
+		private void chbApplyFill_Unchecked(object sender, RoutedEventArgs e)
+		{
+			if (!(chbApplyOutline.IsChecked ?? false))
+				chbApplyOutline.IsChecked = true;
+		}
+
+		private void chbApplyOutline_Unchecked(object sender, RoutedEventArgs e)
+		{
+			if (!(chbApplyFill.IsChecked ?? false))
+				chbApplyFill.IsChecked = true;
 		}
 
 		private void btnApply_Click(object sender, RoutedEventArgs e)
@@ -275,6 +428,22 @@ namespace InfColorConvert
 					break;
 			}
 			return name;
+		}
+
+		private void btnTest_Click(object sender, RoutedEventArgs e)
+		{
+			Random rnd = new Random();
+			corel.ShapeRange sr = corelApp.ActivePage.Shapes.All();
+
+			foreach (corel.Shape s in sr)
+			{
+				//s.Fill.UniformColor.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
+				//s.Outline.Color.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
+				//s.Fill.UniformColor.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
+				//s.Outline.Color.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
+				s.Fill.UniformColor = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
+				s.Outline.Color = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
+			}
 		}
 	}
 }
