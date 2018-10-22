@@ -9,8 +9,8 @@
              MinWidth="235">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <StackPanel>
-            <TextBox Name="tbHelpTips" Width="auto" MinHeight="30" Padding="5" TextWrapping="Wrap" IsReadOnly="True" Text=""/>
-            <Label Content="Remap:" FontWeight="Bold" Margin="0,10,0,0"></Label>
+            <!--<TextBox Name="tbHelpTips" Width="auto" MinHeight="30" Padding="5" TextWrapping="Wrap" IsReadOnly="True" Text=""/>-->
+            <Label Content="Remap:" FontWeight="Bold" Margin="0,0,0,0"></Label>
             <!--выбор что ковертировать-->
             <ComboBox Name="cbRemap" Height="22" Margin="0,5,0,0" SelectionChanged="cbRemap_SelectionChanged">
                 <TextBlock>Color</TextBlock>
@@ -254,8 +254,8 @@
                 </DockPanel>
                 <DockPanel Margin="0,10,0,0">
                     <Label Content="Text as:" Padding="0"></Label>
-                    <RadioButton GroupName="groupTextAs" Content="Story" VerticalAlignment="Center" Margin="18,0,0,0" IsChecked="True"></RadioButton>
-                    <RadioButton GroupName="groupTextAs" Content="Character" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
+                    <RadioButton GroupName="groupTextAs" Name="rbTextAsStory" Content="Story" VerticalAlignment="Center" Margin="18,0,0,0" IsChecked="True"></RadioButton>
+                    <RadioButton GroupName="groupTextAs" Name="rbTextAsChar" Content="Character" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
                 </DockPanel>
             </StackPanel>
 
@@ -263,14 +263,15 @@
             <!--применить-->
             <DockPanel Margin="0,20,0,0">
                 <ComboBox Name="cbApplyRange" Height="22" Width="130">
-                    <TextBlock>Current Page</TextBlock>
-                    <TextBlock>Selected Objects</TextBlock>
-                    <TextBlock>Current Document</TextBlock>
+                    <TextBlock>Select</TextBlock>
+                    <TextBlock>Layer</TextBlock>
+                    <TextBlock>Page</TextBlock>
+                    <TextBlock>Document</TextBlock>
                     <TextBlock>Open Documents</TextBlock>
                 </ComboBox>
                 <Button Name="btnApply" Content="Apply" HorizontalAlignment="Right" Padding="25,0,25,0" IsDefault="True" Click="btnApply_Click"></Button>
             </DockPanel>
-            <Button Name="btnTest" Height="20" Width="50" Margin="0,20,0,0" HorizontalAlignment="Right" Content="Test" Click="btnTest_Click"></Button>
+            <!--<Button Name="btnTest" Height="20" Width="50" Margin="0,20,0,0" HorizontalAlignment="Right" Content="Test" Click="btnTest_Click"></Button>-->
         </StackPanel>
     </Grid>
 </UserControl>

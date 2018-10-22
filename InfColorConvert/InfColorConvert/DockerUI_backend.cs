@@ -21,28 +21,17 @@ namespace InfColorConvert
 {
 	public partial class DockerUI : UserControl
 	{
-		Stopwatch stopwatch = new Stopwatch();
+		//Stopwatch stopwatch = new Stopwatch();
 
 		private void Start()
 		{
-			stopwatch.Reset();
-			stopwatch.Start();
+			if (corelApp.Documents.Count == 0)
+				return;
+
+			//stopwatch.Reset();
+			//stopwatch.Start();
 
 			corelApp.Optimization = true;
-
-			switch (cbApplyRange.SelectedIndex)
-			{
-				case 0:
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				default:
-					break;
-			}
 
 			ICheckColor check = (ICheckColor)new CheckNoneColor();
 			IConvertColor convert = (IConvertColor)new ConvertKeepColor();
@@ -53,15 +42,15 @@ namespace InfColorConvert
 					switch (cbRemapColorType.SelectedIndex)
 					{
 						case 0:
-							tbHelpTips.Text = "remap color";
+							//remap color
 							check = (ICheckColor)new CheckUserColor(colorRemapUserColor);
 							break;
 						case 1:
-							tbHelpTips.Text = "remap impure black";
+							//remap impure black
 							check = (ICheckColor)new CheckImpureBlack(tbRemapImpureBlackColorLimit.Value);
 							break;
 						case 2:
-							tbHelpTips.Text = "remap impure gray";
+							//remap impure gray
 							check = (ICheckColor)new CheckImpureGray(tbRemapImpureGrayColorLimit.Value);
 							break;
 						default:
@@ -72,19 +61,19 @@ namespace InfColorConvert
 					switch (cbRemapColorSpaceType.SelectedIndex)
 					{
 						case 0:
-							tbHelpTips.Text = "remap color space cmyk";
+							//remap color space cmyk
 							check = (ICheckColor)new CheckColorSpaceCMYK();
 							break;
 						case 1:
-							tbHelpTips.Text = "remap color space rgb";
+							//remap color space rgb
 							check = (ICheckColor)new CheckColorSpaceRGB();
 							break;
 						case 2:
-							tbHelpTips.Text = "remap color space gray";
+							//remap color space gray
 							check = (ICheckColor)new CheckColorSpaceGray();
 							break;
 						case 3:
-							tbHelpTips.Text = "remap color space pantone";
+							//remap color space pantone
 							check = (ICheckColor)new CheckColorSpacePantone();
 							break;
 						default:
@@ -95,7 +84,7 @@ namespace InfColorConvert
 					switch (cbRemapColorRangeType.SelectedIndex)
 					{
 						case 0:
-							tbHelpTips.Text = "remap cmyk range";
+							//remap cmyk range
 							check = (ICheckColor)new CheckColorRangeCMYK(tbRemapColorRangeCyanMin.Value,
 																		tbRemapColorRangeCyanMax.Value,
 																		tbRemapColorRangeMagentaMin.Value,
@@ -106,7 +95,7 @@ namespace InfColorConvert
 																		tbRemapColorRangeBlackMax.Value);
 							break;
 						case 1:
-							tbHelpTips.Text = "remap rgb range";
+							//remap rgb range
 							check = (ICheckColor)new CheckColorRangeRGB(tbRemapColorRangeRedMin.Value,
 																		tbRemapColorRangeRedMax.Value,
 																		tbRemapColorRangeGreenMin.Value,
@@ -115,7 +104,7 @@ namespace InfColorConvert
 																		tbRemapColorRangeBlueMax.Value);
 							break;
 						case 2:
-							tbHelpTips.Text = "remap gray range";
+							//remap gray range
 							check = (ICheckColor)new CheckColorRangeGray(tbRemapColorRangeGrayMin.Value, tbRemapColorRangeGrayMax.Value);
 							break;
 						default:
@@ -123,7 +112,7 @@ namespace InfColorConvert
 					}
 					break;
 				case 3:
-					tbHelpTips.Text = "remap any color";
+					//remap any color
 					check = (ICheckColor)new CheckAnyColor();
 					break;
 				default:
@@ -133,30 +122,30 @@ namespace InfColorConvert
 			switch (cbTo.SelectedIndex)
 			{
 				case 0:
-					tbHelpTips.Text = tbHelpTips.Text + " to color";
+					//to color
 					convert = (IConvertColor)new ConvertUserColor(colorToUserColor);
 					break;
 				case 1:
 					switch (cbToColorSpaceType.SelectedIndex)
 					{
 						case 0:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space cmyk";
+							//to color space cmyk
 							convert = (IConvertColor)new ConvertColorSpaceCMYK();
 							break;
 						case 1:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space cmyk + pantone";
+							//to color space cmyk + pantone
 							convert = (IConvertColor)new ConvertColorSpaceCMYKPantone();
 							break;
 						case 2:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space rgb";
+							//to color space rgb
 							convert = (IConvertColor)new ConvertColorSpaceRGB();
 							break;
 						case 3:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space gray";
+							//to color space gray
 							convert = (IConvertColor)new ConvertColorSpaceGray();
 							break;
 						case 4:
-							tbHelpTips.Text = tbHelpTips.Text + " to color space pantone";
+							//to color space pantone
 
 							break;
 						default:
@@ -164,23 +153,73 @@ namespace InfColorConvert
 					}
 					break;
 				case 2:
-					tbHelpTips.Text = tbHelpTips.Text + " to color tint";
-					convert = (IConvertColor)new ConvertColorTint(fountainColorTint);
+					//to color tint
+					convert = (IConvertColor)new ConvertColorTint(fountainColorTint, (rbToColorTint.IsChecked ?? false));
 					break;
 				default:
 					break;
 			}
 
-			RemapShapeRange remapShapeRange = new RemapShapeRange(check, convert, corelApp.ActivePage.Shapes.All());
-			remapShapeRange.Start();
+			switch (cbApplyRange.SelectedIndex)
+			{
+				case 0:
+					//select
+					Apply(corelApp.ActiveSelectionRange, check, convert);
+					break;
+				case 1:
+					//layer
+					Apply(corelApp.ActiveLayer.Shapes.All(), check, convert);
+					break;
+				case 2:
+					//page
+					Apply(corelApp.ActivePage.SelectableShapes.All(), check, convert);
+					break;
+				case 3:
+					//document
+					foreach (corel.Page p in corelApp.ActiveDocument.Pages)
+					{
+						p.Activate();
+						Apply(p.SelectableShapes.All(), check, convert);
+					}
+					break;
+				case 4:
+					//all
+					foreach (corel.Document doc in corelApp.Documents)
+					{
+						doc.Activate();
+						foreach (corel.Page p in doc.Pages)
+						{
+							p.Activate();
+							Apply(p.SelectableShapes.All(), check, convert);
+						}
+					}
+					break;
+				default:
+					break;
+			}
 
 			corelApp.ActiveDocument.ClearSelection();
 			corelApp.Optimization = false;
 			corelApp.ActiveWindow.Refresh();
 			corelApp.Application.Refresh();
 
-			stopwatch.Stop();
+			//stopwatch.Stop();
 			//MessageBox.Show(stopwatch.ElapsedMilliseconds);
 		}
+
+		private void Apply(corel.ShapeRange sr, ICheckColor check, IConvertColor convert)
+		{
+			bool fill = chbApplyFill.IsChecked ?? false;
+			bool outline = chbApplyOutline.IsChecked ?? false;
+			bool textAs = rbTextAsStory.IsChecked ?? false;
+
+			if (sr != null)
+				if (sr.Count > 0)
+				{
+					RemapShapeRange remapShapeRange = new RemapShapeRange(check, convert, sr, fill, outline, textAs);
+					remapShapeRange.Start();
+				}
+		}
+
 	}
 }

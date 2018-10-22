@@ -10,18 +10,28 @@ namespace InfColorConvert
 	class ConvertColorTint : IConvertColor
 	{
 		private corel.Color[] fountainColors;
+		private bool tint = true;
+		private Random rnd = new Random();
 
-		public ConvertColorTint(corel.Color[] fountainColors)
+		public ConvertColorTint(corel.Color[] fountainColors, bool tint)
 		{
 			this.fountainColors = fountainColors;
+			this.tint = tint;
 		}
 
 		public corel.Color Convert(corel.Color color)
 		{
 			corel.Color c = new corel.Color();
+			int i = 0;
 			c.CopyAssign(color);
 			c.ConvertToGray();
-			int i = (int)Math.Floor(c.Gray / 2.55f);
+			//float y = 0.299f * c.RGBRed + 0.587f * c.RGBGreen + 0.114f * c.RGBBlue;
+
+			if (tint)
+				i = (int)Math.Floor(c.Gray / 2.55f);
+			else
+				i = rnd.Next(100);
+
 			return fountainColors[i];
 		}
 	}

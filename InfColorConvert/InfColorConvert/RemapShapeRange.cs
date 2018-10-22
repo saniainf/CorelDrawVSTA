@@ -14,12 +14,18 @@ namespace InfColorConvert
 		ICheckColor checkColor;
 		IConvertColor convertColor;
 		corel.ShapeRange shapeRange;
+		bool applyFill = true;
+		bool applyOutline = true;
+		bool textAsStory = true;
 
-		public RemapShapeRange(ICheckColor checkColor, IConvertColor convertColor, corel.ShapeRange shapeRange)
+		public RemapShapeRange(ICheckColor checkColor, IConvertColor convertColor, corel.ShapeRange shapeRange, bool fill, bool outline, bool textAsStory)
 		{
 			this.checkColor = checkColor;
 			this.convertColor = convertColor;
 			this.shapeRange = shapeRange;
+			this.applyFill = fill;
+			this.applyOutline = outline;
+			this.textAsStory = textAsStory;
 		}
 
 		public void Start()
@@ -121,9 +127,11 @@ namespace InfColorConvert
 			s.PowerClip.LeaveEditMode();
 		}
 
+		// convert
+
 		private void RemapCdrSimpleShape(corel.Shape s)
 		{
-			if (s.CanHaveFill)
+			if (applyFill && s.CanHaveFill)
 			{
 				switch (s.Fill.Type)
 				{
@@ -148,7 +156,7 @@ namespace InfColorConvert
 				}
 			}
 
-			if (s.CanHaveOutline)
+			if (applyOutline && s.CanHaveOutline)
 			{
 				switch (s.Outline.Type)
 				{
@@ -168,42 +176,52 @@ namespace InfColorConvert
 
 		private void RemapCdrTextShape(corel.Shape s)
 		{
-			foreach (corel.TextRange tr in s.Text.Story.Characters)
+			if (textAsStory)
 			{
-				switch (tr.Fill.Type)
-				{
-					case cdrFillType.cdrFountainFill:
-						RemapFountainFill(tr.Fill.Fountain);
-						break;
-					case cdrFillType.cdrHatchFill:
-						break;
-					case cdrFillType.cdrNoFill:
-						break;
-					case cdrFillType.cdrPatternFill:
-						break;
-					case cdrFillType.cdrPostscriptFill:
-						break;
-					case cdrFillType.cdrTextureFill:
-						break;
-					case cdrFillType.cdrUniformFill:
-						RemapUniformFill(tr.Fill);
-						break;
-					default:
-						break;
-				}
+				RemapCdrSimpleShape(s);
+			}
 
-				switch (tr.Outline.Type)
+			else
+			{
+				foreach (corel.TextRange tr in s.Text.Story.Characters)
 				{
-					case cdrOutlineType.cdrEnhancedOutline:
-						RamapOutline(tr.Outline);
-						break;
-					case cdrOutlineType.cdrNoOutline:
-						break;
-					case cdrOutlineType.cdrOutline:
-						RamapOutline(tr.Outline);
-						break;
-					default:
-						break;
+					if (applyFill)
+						switch (tr.Fill.Type)
+						{
+							case cdrFillType.cdrFountainFill:
+								RemapFountainFill(tr.Fill.Fountain);
+								break;
+							case cdrFillType.cdrHatchFill:
+								break;
+							case cdrFillType.cdrNoFill:
+								break;
+							case cdrFillType.cdrPatternFill:
+								break;
+							case cdrFillType.cdrPostscriptFill:
+								break;
+							case cdrFillType.cdrTextureFill:
+								break;
+							case cdrFillType.cdrUniformFill:
+								RemapUniformFill(tr.Fill);
+								break;
+							default:
+								break;
+						}
+
+					if (applyOutline)
+						switch (tr.Outline.Type)
+						{
+							case cdrOutlineType.cdrEnhancedOutline:
+								RamapOutline(tr.Outline);
+								break;
+							case cdrOutlineType.cdrNoOutline:
+								break;
+							case cdrOutlineType.cdrOutline:
+								RamapOutline(tr.Outline);
+								break;
+							default:
+								break;
+						}
 				}
 			}
 		}

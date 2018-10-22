@@ -434,6 +434,7 @@ namespace InfColorConvert
 		{
 			Random rnd = new Random();
 			corel.ShapeRange sr = corelApp.ActivePage.Shapes.All();
+			int i = 100;
 
 			foreach (corel.Shape s in sr)
 			{
@@ -441,8 +442,9 @@ namespace InfColorConvert
 				//s.Outline.Color.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
 				//s.Fill.UniformColor.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
 				//s.Outline.Color.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
-				s.Fill.UniformColor = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
-				s.Outline.Color = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
+				s.Fill.UniformColor = corelApp.CreateCMYKColor(Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0));
+				//s.Outline.Color = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
+				i--;
 			}
 		}
 	}
