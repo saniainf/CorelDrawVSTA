@@ -91,6 +91,8 @@ namespace InfCDRPreflight
 			s.PowerClip.LeaveEditMode();
 		}
 
+		// какогото хрена идет двойной вызов
+		// закаментил else
 		private void textShape(actionMethod method, corel.Shape s)
 		{
 			if (method == textToCurves)
@@ -99,7 +101,7 @@ namespace InfCDRPreflight
 				textUniformFillToCMYK(s.Text.Story.Characters);
 			if (method == outlineFillToCMYK)
 				textOutlineFillToCMYK(s.Text.Story.Characters);
-			else method(s);
+			//else method(s);
 		}
 
 		private SolidColorBrush convertToSolidColorBrush(corel.Color c)
