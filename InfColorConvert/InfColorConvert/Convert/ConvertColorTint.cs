@@ -13,17 +13,17 @@ namespace InfColorConvert
 		private bool tint = true;
 		private Random rnd = new Random();
 
-		public ConvertColorTint(corel.Color[] fountainColors, bool tint)
+		public ConvertColorTint(corel.Color[] fountainColors, bool useColorTint)
 		{
 			this.fountainColors = fountainColors;
-			this.tint = tint;
+			this.tint = useColorTint;
 		}
 
-		public corel.Color Convert(corel.Color color)
+		public corel.Color Convert(corel.Color castColor)
 		{
 			corel.Color c = new corel.Color();
 			int i = 0;
-			c.CopyAssign(color);
+			c.CopyAssign(castColor);
 			c.ConvertToGray();
 			//float y = 0.299f * c.RGBRed + 0.587f * c.RGBGreen + 0.114f * c.RGBBlue;
 

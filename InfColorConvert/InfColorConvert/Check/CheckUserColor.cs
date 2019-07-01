@@ -10,15 +10,25 @@ namespace InfColorConvert
 	class CheckUserColor : ICheckColor
 	{
 		corel.Color sampleColor;
+		bool useTint;
 
-		public CheckUserColor(corel.Color castColor)
+		public CheckUserColor(corel.Color sampleColor, bool usePantoneTint)
 		{
-			this.sampleColor = castColor;
+			this.sampleColor = sampleColor;
+			useTint = usePantoneTint;
 		}
 
 		public bool Check(corel.Color color)
 		{
+			if (!useTint && color.IsSpot)
+				return CheckPantoneKeepTint(color);
+
 			return (color.IsSame(sampleColor));
+		}
+
+		private bool CheckPantoneKeepTint(corel.Color color)
+		{
+			return (color.SpotColorName == sampleColor.SpotColorName);
 		}
 	}
 }

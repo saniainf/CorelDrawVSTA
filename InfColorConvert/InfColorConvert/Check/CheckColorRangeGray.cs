@@ -19,7 +19,7 @@ namespace InfColorConvert
 
 		public bool Check(corel.Color color)
 		{
-			if (color.Type != cdrColorType.cdrColorGray)
+			if (!color.IsGray)
 				return false;
 
 			if (color.Gray >= grayMin && color.Gray <= grayMax)

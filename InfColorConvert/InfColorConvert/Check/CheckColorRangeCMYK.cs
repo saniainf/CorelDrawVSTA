@@ -11,7 +11,6 @@ namespace InfColorConvert
 	{
 		private int cyanMin, cyanMax, magentaMin, magentaMax, yellowMin, yellowMax, blackMin, blackMax;
 
-
 		public CheckColorRangeCMYK(int cMin, int cMax, int mMin, int mMax, int yMin, int yMax, int bMin, int bMax)
 		{
 			this.cyanMin = cMin;
@@ -26,7 +25,7 @@ namespace InfColorConvert
 
 		public bool Check(corel.Color color)
 		{
-			if (color.Type != cdrColorType.cdrColorCMYK)
+			if (!color.IsCMYK)
 				return false;
 
 			if ((color.CMYKCyan >= cyanMin && color.CMYKCyan <= cyanMax) &&

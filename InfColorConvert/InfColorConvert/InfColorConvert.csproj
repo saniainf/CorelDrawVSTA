@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Boost.cs" />
     <Compile Include="Check\CheckAnyColor.cs" />
     <Compile Include="Check\CheckColorRangeCMYK.cs" />
     <Compile Include="Check\CheckColorRangeGray.cs" />
@@ -62,9 +63,11 @@
     <Compile Include="Check\CheckImpureGray.cs" />
     <Compile Include="Check\CheckNoneColor.cs" />
     <Compile Include="Check\CheckUserColor.cs" />
+    <Compile Include="ColorBag.cs" />
     <Compile Include="Convert\ConvertColorSpaceCMYK.cs" />
     <Compile Include="Convert\ConvertColorSpaceCMYKPantone.cs" />
     <Compile Include="Convert\ConvertColorSpaceGray.cs" />
+    <Compile Include="Convert\ConvertColorSpacePantone.cs" />
     <Compile Include="Convert\ConvertColorSpaceRGB.cs" />
     <Compile Include="Convert\ConvertColorTint.cs" />
     <Compile Include="Convert\ConvertKeepColor.cs" />

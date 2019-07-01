@@ -31,8 +31,6 @@ namespace InfColorConvert
 			//stopwatch.Reset();
 			//stopwatch.Start();
 
-			corelApp.Optimization = true;
-
 			ICheckColor check = (ICheckColor)new CheckNoneColor();
 			IConvertColor convert = (IConvertColor)new ConvertKeepColor();
 
@@ -43,7 +41,7 @@ namespace InfColorConvert
 					{
 						case 0:
 							//remap color
-							check = (ICheckColor)new CheckUserColor(colorRemapUserColor);
+							check = (ICheckColor)new CheckUserColor(colorRemapUserColor, chbRemapUserColorTint.IsChecked ?? false); // использование тинта пантона
 							break;
 						case 1:
 							//remap impure black
@@ -123,7 +121,7 @@ namespace InfColorConvert
 			{
 				case 0:
 					//to color
-					convert = (IConvertColor)new ConvertUserColor(colorToUserColor);
+					convert = (IConvertColor)new ConvertUserColor(colorToUserColor, chbToUserColorTint.IsChecked ?? false); // использование тинта пантона
 					break;
 				case 1:
 					switch (cbToColorSpaceType.SelectedIndex)
@@ -146,7 +144,7 @@ namespace InfColorConvert
 							break;
 						case 4:
 							//to color space pantone
-
+							convert = (IConvertColor)new ConvertColorSpacePantone(corelApp);
 							break;
 						default:
 							break;
@@ -164,47 +162,52 @@ namespace InfColorConvert
 			{
 				case 0:
 					//select
+					boost.BoostStart();
 					Apply(corelApp.ActiveSelectionRange, check, convert);
+					boost.BoostFinish();
 					break;
 				case 1:
 					//layer
+					boost.BoostStart();
 					Apply(corelApp.ActiveLayer.Shapes.All(), check, convert);
+					boost.BoostFinish();
 					break;
 				case 2:
 					//page
+					boost.BoostStart();
 					Apply(corelApp.ActivePage.SelectableShapes.All(), check, convert);
+					boost.BoostFinish();
 					break;
 				case 3:
 					//document
+					boost.BoostStart();
 					foreach (corel.Page p in corelApp.ActiveDocument.Pages)
 					{
 						p.Activate();
 						Apply(p.SelectableShapes.All(), check, convert);
 					}
+					boost.BoostFinish();
 					break;
 				case 4:
 					//all
 					foreach (corel.Document doc in corelApp.Documents)
 					{
 						doc.Activate();
+						boost.BoostStart();
 						foreach (corel.Page p in doc.Pages)
 						{
 							p.Activate();
 							Apply(p.SelectableShapes.All(), check, convert);
 						}
+						boost.BoostFinish();
 					}
 					break;
 				default:
 					break;
 			}
 
-			corelApp.ActiveDocument.ClearSelection();
-			corelApp.Optimization = false;
-			corelApp.ActiveWindow.Refresh();
-			corelApp.Application.Refresh();
-
 			//stopwatch.Stop();
-			//MessageBox.Show(stopwatch.ElapsedMilliseconds);
+			//MessageBox.Show(stopwatch.ElapsedMilliseconds.ToString());
 		}
 
 		private void Apply(corel.ShapeRange sr, ICheckColor check, IConvertColor convert)
@@ -220,6 +223,5 @@ namespace InfColorConvert
 					remapShapeRange.Start();
 				}
 		}
-
 	}
 }

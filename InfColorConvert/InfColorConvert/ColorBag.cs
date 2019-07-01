@@ -7,11 +7,8 @@ using corel = Corel.Interop.VGCore;
 
 namespace InfColorConvert
 {
-	class CheckColorSpacePantone : ICheckColor
+	class ColorBag
 	{
-		public bool Check(corel.Color color)
-		{
-			return (color.IsSpot);
-		}
+		
 	}
 }

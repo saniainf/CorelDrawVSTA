@@ -19,7 +19,7 @@ namespace InfColorConvert
 
 		public bool Check(corel.Color color)
 		{
-			if (color.Type == cdrColorType.cdrColorCMYK)
+			if (color.IsCMYK)
 				if ((color.CMYKCyan + color.CMYKMagenta + color.CMYKYellow > sumCMY) && color.CMYKBlack > (100 - blackLimit))
 					return true;
 

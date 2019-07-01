@@ -22,6 +22,8 @@ namespace InfColorConvert
 	{
 		private corel.Application corelApp;
 
+		private Boost boost;
+
 		private corel.Color colorRemapUserColor = new corel.Color();
 		private corel.Color colorToUserColor = new corel.Color();
 		private corel.Color[] fountainColorTint = new corel.Color[101];
@@ -30,6 +32,8 @@ namespace InfColorConvert
 		{
 			this.corelApp = app;
 			InitializeComponent();
+
+			boost = new Boost(app);
 
 			//default
 
@@ -309,6 +313,22 @@ namespace InfColorConvert
 				int posEnd = endFC.Position;
 				corel.Color startC = startFC.Color;
 				corel.Color endC = endFC.Color;
+
+				if (startC.IsSpot)
+				{
+					corel.Color c = new corel.Color();
+					c.CopyAssign(startC);
+					c.ConvertToCMYK();
+					startC = c;
+				}
+
+				if (endC.IsSpot)
+				{
+					corel.Color c = new corel.Color();
+					c.CopyAssign(endC);
+					c.ConvertToCMYK();
+					endC = c;
+				}
 
 				for (int j = posStart; j <= posEnd; j++)
 				{

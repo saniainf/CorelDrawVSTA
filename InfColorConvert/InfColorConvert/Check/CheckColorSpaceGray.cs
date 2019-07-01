@@ -11,7 +11,7 @@ namespace InfColorConvert
 	{
 		public bool Check(corel.Color color)
 		{
-			return (color.Type == cdrColorType.cdrColorGray);
+			return (color.IsGray);
 		}
 	}
 }

@@ -18,6 +18,15 @@ namespace InfColorConvert
 		bool applyOutline = true;
 		bool textAsStory = true;
 
+		/// <summary>
+		/// перекрасить массив шейпов
+		/// </summary>
+		/// <param name="checkColor">метод проверки</param>
+		/// <param name="convertColor">метод конвертации</param>
+		/// <param name="shapeRange">массив шейпов</param>
+		/// <param name="fill">применить к заливке</param>
+		/// <param name="outline">применить к обводке</param>
+		/// <param name="textAsStory">текст посимвольно</param>
 		public RemapShapeRange(ICheckColor checkColor, IConvertColor convertColor, corel.ShapeRange shapeRange, bool fill, bool outline, bool textAsStory)
 		{
 			this.checkColor = checkColor;

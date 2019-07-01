@@ -32,7 +32,10 @@
                             <Rectangle Width="44" Height="44" Stroke="DarkGray"></Rectangle>
                         </Canvas>
                         <StackPanel>
-                            <Button Name="btnPickRemapUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickRemapUserColor_Click"></Button>
+                            <DockPanel>
+                                <Button Name="btnPickRemapUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickRemapUserColor_Click"></Button>
+                                <CheckBox Name="chbRemapUserColorTint" Content="Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+                            </DockPanel>
                             <Label Name="lblRemapUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                         </StackPanel>
                     </DockPanel>
@@ -210,7 +213,10 @@
                         <Rectangle Width="44" Height="44" Stroke="DarkGray"></Rectangle>
                     </Canvas>
                     <StackPanel>
-                        <Button Name="btnPickToUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickToUserColor_Click"></Button>
+                        <DockPanel>
+                            <Button Name="btnPickToUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickToUserColor_Click"></Button>
+                            <CheckBox Name="chbToUserColorTint" Content="Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+                        </DockPanel>
                         <Label Name="lblToUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                     </StackPanel>
                 </DockPanel>
@@ -244,7 +250,7 @@
             </StackPanel>
 
             <Separator Margin="0,15,0,0"></Separator>
-            <!--к чему применять-->
+            <!--опции-->
             <Label Content="Options:" FontWeight="Bold" Margin="0,10,0,0"></Label>
             <StackPanel Margin="0,5,0,0">
                 <DockPanel>
@@ -254,9 +260,13 @@
                 </DockPanel>
                 <DockPanel Margin="0,10,0,0">
                     <Label Content="Text as:" Padding="0"></Label>
-                    <RadioButton GroupName="groupTextAs" Name="rbTextAsStory" Content="Story" VerticalAlignment="Center" Margin="18,0,0,0" IsChecked="True"></RadioButton>
+                    <RadioButton GroupName="groupTextAs" Name="rbTextAsStory" Content="Story" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></RadioButton>
                     <RadioButton GroupName="groupTextAs" Name="rbTextAsChar" Content="Character" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
                 </DockPanel>
+                <!--<DockPanel Margin="0,10,0,0">
+                    <Label Content="Preserve Pantone Tint:" Padding="0"></Label>
+                    <CheckBox Name="chbKeepPantoneTint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+                </DockPanel>-->
             </StackPanel>
 
             <Separator Margin="0,15,0,0" Background="Black"></Separator>
