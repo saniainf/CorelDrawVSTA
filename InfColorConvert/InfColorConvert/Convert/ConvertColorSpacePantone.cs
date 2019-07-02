@@ -33,15 +33,21 @@ namespace InfColorConvert
 			string colorName;
 
 			colorName = color.Name;
-			colorName = colorName.Replace(" 2X", "");
-			colorName = colorName.Substring(8, colorName.LastIndexOf(' ') - 8);
-			colorName = "PANTONE " + colorName;
-			if (!colorName.Contains("Trans. White")) //разные названия TransWhite
-				colorName = colorName + " C";
 
-			// исправление неправильного названия в PANTONE MATCHING SYSTEM Coated - Corel 10
-			if (colorName == "PANTONE Relfex Blue C")
-				colorName = "PANTONE Reflex Blue C";
+			// если спот из таблиц пантонов
+			if (colorName.Contains("PANTONE"))
+			{
+				colorName = colorName.Replace(" 2X", "");
+				colorName = colorName.Substring(0, colorName.LastIndexOf(' '));
+
+				//разные названия TransWhite
+				if (!colorName.Contains("Trans. White"))
+					colorName = colorName + " C";
+
+				// исправление неправильного названия в PANTONE MATCHING SYSTEM Coated - Corel 10
+				if (colorName == "PANTONE Relfex Blue C")
+					colorName = "PANTONE Reflex Blue C";
+			}
 
 			// поиск в найденных цветах
 			if (foundColors.ContainsKey(colorName))
@@ -50,29 +56,32 @@ namespace InfColorConvert
 				return foundColors[colorName];
 			}
 
-			// поиск в палитрах корела
-			foreach (string id in palettesId)
+			// поиск в палитрах корела если палитра Locked
+			if (color.Palette.Locked)
 			{
-				if (color.PaletteIdentifier != id)
+				foreach (string id in palettesId)
 				{
-					corel.Palette castPalette = corelApp.PaletteManager.GetPalette(id);
-					int colorID = castPalette.FindColor(colorName);
-					if (colorID != 0)
+					if (color.PaletteIdentifier != id)
 					{
-						corel.Color c = castPalette.get_Color(colorID);
-						foundColors.Add(c.Name.ToString(), c);
-						c.Tint = color.Tint;
-						return c;
+						corel.Palette castPalette = corelApp.PaletteManager.GetPalette(id);
+						int colorID = castPalette.FindColor(colorName);
+						if (colorID != 0)
+						{
+							corel.Color c = castPalette.get_Color(colorID);
+							foundColors.Add(c.Name.ToString(), c);
+							c.Tint = color.Tint;
+							return c;
+						}
 					}
-				}
-				else
-				{
-					return color;
+					else
+					{
+						return color;
+					}
 				}
 			}
 
 			// если нигде нет
-			if (MessageBox.Show("Ненайден цвет:\n" + color.Name + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+			if (MessageBox.Show("В палитрах ненайден цвет:\n" + color.Name + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
 			{
 				corel.Color c = new corel.Color();
 				if (c.UserAssignEx())
@@ -80,6 +89,11 @@ namespace InfColorConvert
 					foundColors.Add(colorName, c);
 					return c;
 				}
+			}
+			else
+			{
+				foundColors.Add(colorName, color);
+				return color;
 			}
 
 			return color;
