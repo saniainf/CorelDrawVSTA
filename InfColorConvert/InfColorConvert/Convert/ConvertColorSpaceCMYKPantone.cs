@@ -11,7 +11,10 @@ namespace InfColorConvert
 	{
 		public corel.Color Convert(corel.Color color)
 		{
-			if (color.IsCMYK || color.IsSpot)
+			if (color.IsCMYK)
+				return color;
+
+			if (color.IsSpot && color.Palette.Locked)
 				return color;
 
 			corel.Color c = new corel.Color();

@@ -33,8 +33,8 @@
                         </Canvas>
                         <StackPanel>
                             <DockPanel>
-                                <Button Name="btnPickRemapUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickRemapUserColor_Click"></Button>
-                                <CheckBox Name="chbRemapUserColorTint" Content="Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+                                <Button Name="btnPickRemapUserColor" Content="Select Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickRemapUserColor_Click"></Button>
+                                <CheckBox Name="chbRemapUserColorTint" Content="Allow Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
                             </DockPanel>
                             <Label Name="lblRemapUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                         </StackPanel>
@@ -65,6 +65,14 @@
                     <TextBlock>Gray</TextBlock>
                     <TextBlock>Pantone</TextBlock>
                 </ComboBox>
+                <!--конвертировать из пантонов-->
+                <StackPanel Name="spRemapColorSpacePantone" Margin="0,5,0,0">
+                    <DockPanel Height="22">
+                        <Label Content="Color Palette:" Padding="0" VerticalAlignment="Center"></Label>
+                        <RadioButton GroupName="groupPaletteIs" Name="rbPaletteIsFixed" Content="Fixed" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></RadioButton>
+                        <RadioButton GroupName="groupPaletteIs" Name="rbPaletteIsCustom" Content="Custom" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="False"></RadioButton>
+                    </DockPanel>
+                </StackPanel>
             </StackPanel>
             <!--конвертировать из цветового диапазона-->
             <StackPanel Name="spRemapColorRange" Margin="0,5,0,0">
@@ -214,8 +222,8 @@
                     </Canvas>
                     <StackPanel>
                         <DockPanel>
-                            <Button Name="btnPickToUserColor" Content="Pick Remap Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickToUserColor_Click"></Button>
-                            <CheckBox Name="chbToUserColorTint" Content="Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+                            <Button Name="btnPickToUserColor" Content="Select Color" Padding="10,0,10,0" Height="22" HorizontalAlignment="Left" Margin="10,0,0,0" Click="btnPickToUserColor_Click"></Button>
+                            <CheckBox Name="chbToUserColorTint" Content="Allow Tint" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="True"></CheckBox>
                         </DockPanel>
                         <Label Name="lblToUserColor" Content="Pantone Yellow Gray 234C" Height="22" Margin="10,0,0,0" Padding="0" VerticalContentAlignment="Center"></Label>
                     </StackPanel>

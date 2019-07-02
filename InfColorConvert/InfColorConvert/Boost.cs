@@ -28,6 +28,7 @@ namespace InfColorConvert
 		{
 			corelApp.ActiveDocument.PreserveSelection = true;
 			corelApp.ActiveDocument.RestoreSettings();
+			corelApp.ActiveDocument.ClearSelection();
 			corelApp.EventsEnabled = true;
 			corelApp.Optimization = false;
 			corelApp.ActiveWindow.Refresh();

@@ -72,7 +72,7 @@ namespace InfColorConvert
 							break;
 						case 3:
 							//remap color space pantone
-							check = (ICheckColor)new CheckColorSpacePantone();
+							check = (ICheckColor)new CheckColorSpacePantone(rbPaletteIsFixed.IsChecked ?? false);
 							break;
 						default:
 							break;

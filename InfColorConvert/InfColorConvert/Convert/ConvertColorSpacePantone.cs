@@ -23,18 +23,21 @@ namespace InfColorConvert
 			 "66570bd8-9070-44a3-91cd-a695987fc88b",	//PANTONE+ Premium Metallics Coated
 			 "3ab7ce0c-8952-4838-8ebb-8fdfcf3d2c2a" };	//PANTONE® metallic coated
 			foundColors = new Dictionary<string, Color>();
-
-			corel.Color c = new Color();
 		}
 
 		public corel.Color Convert(corel.Color color)
 		{
+			if (!color.IsSpot)
+				return color;
+
 			string colorName;
 
 			colorName = color.Name;
 			colorName = colorName.Replace(" 2X", "");
 			colorName = colorName.Substring(8, colorName.LastIndexOf(' ') - 8);
-			colorName = "PANTONE " + colorName + " C";
+			colorName = "PANTONE " + colorName;
+			if (!colorName.Contains("Trans. White")) //разные названия TransWhite
+				colorName = colorName + " C";
 
 			// исправление неправильного названия в PANTONE MATCHING SYSTEM Coated - Corel 10
 			if (colorName == "PANTONE Relfex Blue C")
@@ -56,8 +59,10 @@ namespace InfColorConvert
 					int colorID = castPalette.FindColor(colorName);
 					if (colorID != 0)
 					{
-						foundColors.Add(castPalette.get_Color(colorID).Name.ToString(), castPalette.get_Color(colorID));
-						return castPalette.get_Color(colorID);
+						corel.Color c = castPalette.get_Color(colorID);
+						foundColors.Add(c.Name.ToString(), c);
+						c.Tint = color.Tint;
+						return c;
 					}
 				}
 				else
@@ -67,7 +72,7 @@ namespace InfColorConvert
 			}
 
 			// если нигде нет
-			if (MessageBox.Show("Ненайден цвет:\n" + colorName + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+			if (MessageBox.Show("Ненайден цвет:\n" + color.Name + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
 			{
 				corel.Color c = new corel.Color();
 				if (c.UserAssignEx())

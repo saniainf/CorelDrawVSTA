@@ -9,9 +9,23 @@ namespace InfColorConvert
 {
 	class CheckColorSpacePantone : ICheckColor
 	{
+		private bool paletteIsFixed;
+
+		public CheckColorSpacePantone(bool paletteIsFixed)
+		{
+			this.paletteIsFixed = paletteIsFixed;
+		}
+
 		public bool Check(corel.Color color)
 		{
-			return (color.IsSpot);
+			if (color.IsSpot)
+			{
+				if (paletteIsFixed && color.Palette.Locked)
+					return true;
+				if (!paletteIsFixed && !color.Palette.Locked)
+					return true;
+			}
+			return false;
 		}
 	}
 }

@@ -116,7 +116,24 @@ namespace InfColorConvert
 
 		private void cbRemapColorSpaceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			ComboBox comboBox = (ComboBox)sender;
 
+			spRemapColorSpacePantone.Visibility = System.Windows.Visibility.Collapsed;
+
+			switch (comboBox.SelectedIndex)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					spRemapColorSpacePantone.Visibility = System.Windows.Visibility.Visible;
+					break;
+				default:
+					break;
+			}
 		}
 
 		private void cbRemapColorRangeType_SelectionChanged(object sender, SelectionChangedEventArgs e)
