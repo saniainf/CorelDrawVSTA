@@ -63,7 +63,7 @@ namespace InfColorConvert
 			}
 
 			// поиск в палитрах корела если палитра Locked
-			if (color.Palette.Locked)
+			if (color.IsSpot)
 			{
 				foreach (string id in palettesId)
 				{
