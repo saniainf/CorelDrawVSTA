@@ -52,8 +52,14 @@ namespace InfColorConvert
 			// поиск в найденных цветах
 			if (foundColors.ContainsKey(colorName))
 			{
-				//System.Diagnostics.Debug.WriteLine("повтор");
-				return foundColors[colorName];
+				corel.Color c = foundColors[colorName];
+				if (color.IsSpot && color.IsTintable && c.IsSpot && c.IsTintable)
+				{
+					c.Tint = color.Tint; 
+					return c;
+				}
+				else
+					return c;
 			}
 
 			// поиск в палитрах корела если палитра Locked
@@ -67,7 +73,8 @@ namespace InfColorConvert
 						int colorID = castPalette.FindColor(colorName);
 						if (colorID != 0)
 						{
-							corel.Color c = castPalette.get_Color(colorID);
+							corel.Color c = new Color();
+							c.PaletteAssign(castPalette.Identifier, colorID);
 							foundColors.Add(c.Name.ToString(), c);
 							c.Tint = color.Tint;
 							return c;
@@ -86,7 +93,10 @@ namespace InfColorConvert
 				corel.Color c = new corel.Color();
 				if (c.UserAssignEx())
 				{
+					// если спот учитывать тинт 
 					foundColors.Add(colorName, c);
+					if (c.IsSpot && c.IsTintable)
+						c.Tint = color.Tint;
 					return c;
 				}
 			}
