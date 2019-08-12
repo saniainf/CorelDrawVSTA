@@ -27,9 +27,6 @@ namespace InfColorConvert
 
 		public corel.Color Convert(corel.Color color)
 		{
-			//if (!color.IsSpot)
-			//	return color;
-
 			string colorName;
 
 			if (color.IsSpot)
@@ -94,6 +91,25 @@ namespace InfColorConvert
 						return color;
 					}
 				}
+
+				// если нигде нет
+				if (MessageBox.Show("В палитрах ненайден цвет:\n" + color.Name + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+				{
+					corel.Color c = new corel.Color();
+					if (c.UserAssignEx())
+					{
+						// если спот учитывать тинт 
+						foundColors.Add(colorName, c);
+						if (c.IsSpot && c.IsTintable)
+							c.Tint = color.Tint;
+						return c;
+					}
+				}
+				else
+				{
+					foundColors.Add(colorName, color);
+					return color;
+				}
 			}
 
 			else
@@ -104,25 +120,6 @@ namespace InfColorConvert
 				foundColors.Add(colorName, c);
 				return c;
 			}
-
-			//// если нигде нет
-			//if (MessageBox.Show("В палитрах ненайден цвет:\n" + color.Name + "\n" + "Заменить вручную?", "Ненайден цвет", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-			//{
-			//	corel.Color c = new corel.Color();
-			//	if (c.UserAssignEx())
-			//	{
-			//		// если спот учитывать тинт 
-			//		foundColors.Add(colorName, c);
-			//		if (c.IsSpot && c.IsTintable)
-			//			c.Tint = color.Tint;
-			//		return c;
-			//	}
-			//}
-			//else
-			//{
-			//	foundColors.Add(colorName, color);
-			//	return color;
-			//}
 
 			return color;
 		}
