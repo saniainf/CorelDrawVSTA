@@ -144,7 +144,10 @@ namespace InfColorConvert
 							break;
 						case 4:
 							//to color space pantone
-							convert = (IConvertColor)new ConvertColorSpacePantone(corelApp);
+							List<string> palettesID = new List<string>();
+							foreach (PaletteListItem item in lbPantonePalette.SelectedItems)
+								palettesID.Add(item.Id);
+							convert = (IConvertColor)new ConvertColorSpacePantone(corelApp, palettesID);
 							break;
 						default:
 							break;

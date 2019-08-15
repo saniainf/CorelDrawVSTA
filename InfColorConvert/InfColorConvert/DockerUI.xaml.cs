@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
+using System.Diagnostics;
 
 namespace InfColorConvert
 {
@@ -27,6 +28,8 @@ namespace InfColorConvert
 		private corel.Color colorRemapUserColor = new corel.Color();
 		private corel.Color colorToUserColor = new corel.Color();
 		private corel.Color[] fountainColorTint = new corel.Color[101];
+
+		private List<PaletteListItem> pantonePalettes;
 
 		public DockerUI(corel.Application app)
 		{
@@ -58,6 +61,10 @@ namespace InfColorConvert
 			{
 				fountainColorTint[i] = corelApp.CreateCMYKColor(0, 0, 0, i);
 			}
+
+			pantonePalettes = new XmlPaletteService(corelApp).LoadPalettes();
+			lbPantonePalette.ItemsSource = pantonePalettes;
+			lbPantonePalette.SelectAll();
 		}
 
 		#region combobox events
@@ -186,7 +193,26 @@ namespace InfColorConvert
 
 		private void cbToColorSpaceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			ComboBox comboBox = (ComboBox)sender;
 
+			spToColorSpacePantone.Visibility = System.Windows.Visibility.Collapsed;
+
+			switch (comboBox.SelectedIndex)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					spToColorSpacePantone.Visibility = System.Windows.Visibility.Visible;
+					break;
+				default:
+					break;
+			}
 		}
 
 		#endregion
@@ -469,20 +495,22 @@ namespace InfColorConvert
 
 		private void btnTest_Click(object sender, RoutedEventArgs e)
 		{
-			Random rnd = new Random();
-			corel.ShapeRange sr = corelApp.ActivePage.Shapes.All();
-			int i = 100;
+			PaletteListItem pli = (PaletteListItem)lbPantonePalette.SelectedItem;
+			MessageBox.Show(pli.Id.ToString());
+			//Random rnd = new Random();
+			//corel.ShapeRange sr = corelApp.ActivePage.Shapes.All();
+			//int i = 100;
 
-			foreach (corel.Shape s in sr)
-			{
-				//s.Fill.UniformColor.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
-				//s.Outline.Color.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
-				//s.Fill.UniformColor.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
-				//s.Outline.Color.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
-				s.Fill.UniformColor = corelApp.CreateCMYKColor(Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0));
-				//s.Outline.Color = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
-				i--;
-			}
+			//foreach (corel.Shape s in sr)
+			//{
+			//	//s.Fill.UniformColor.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
+			//	//s.Outline.Color.CMYKAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100), rnd.Next(100));
+			//	//s.Fill.UniformColor.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
+			//	//s.Outline.Color.RGBAssign(rnd.Next(100), rnd.Next(100), rnd.Next(100));
+			//	s.Fill.UniformColor = corelApp.CreateCMYKColor(Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0), Math.Max(i, 0));
+			//	//s.Outline.Color = corelApp.CreateCMYKColor(0, 0, 0, (rnd.Next(100)));
+			//	i--;
+			//}
 		}
 	}
 }

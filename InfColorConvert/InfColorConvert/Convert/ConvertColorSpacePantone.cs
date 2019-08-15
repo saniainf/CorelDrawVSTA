@@ -11,17 +11,18 @@ namespace InfColorConvert
 	class ConvertColorSpacePantone : IConvertColor
 	{
 		private corel.Application corelApp;
-		private string[] palettesId;
+		private List<string> palettesID;
 		private Dictionary<string, corel.Color> foundColors;
 
-		public ConvertColorSpacePantone(corel.Application app)
+		public ConvertColorSpacePantone(corel.Application app, List<string> palettesID)
 		{
 			corelApp = app;
-			palettesId = new string[] {
-			 "6e75244b-d853-4d2e-bea2-a5da3f195d08",	//PANTONE+ Solid Coated-V2
-			 "978463a2-0b90-4f87-8d5b-7220fbd06768",	//PANTONE+ Pastels &amp; Neons Coated
-			 "66570bd8-9070-44a3-91cd-a695987fc88b",	//PANTONE+ Premium Metallics Coated
-			 "3ab7ce0c-8952-4838-8ebb-8fdfcf3d2c2a" };	//PANTONE® metallic coated
+			//palettesID = new string[] {
+			// "6e75244b-d853-4d2e-bea2-a5da3f195d08",	//PANTONE+ Solid Coated-V2
+			// "978463a2-0b90-4f87-8d5b-7220fbd06768",	//PANTONE+ Pastels &amp; Neons Coated
+			// "66570bd8-9070-44a3-91cd-a695987fc88b",	//PANTONE+ Premium Metallics Coated
+			// "3ab7ce0c-8952-4838-8ebb-8fdfcf3d2c2a" };	//PANTONE® metallic coated
+			this.palettesID = palettesID;
 			foundColors = new Dictionary<string, Color>();
 		}
 
@@ -71,7 +72,7 @@ namespace InfColorConvert
 			// поиск в палитрах корела если палитра Locked
 			if (color.IsSpot)
 			{
-				foreach (string id in palettesId)
+				foreach (string id in palettesID)
 				{
 					if (color.PaletteIdentifier != id)
 					{

@@ -230,7 +230,7 @@
                 </DockPanel>
             </StackPanel>
             <!--конвертировать в цветовое пространство-->
-            <StackPanel Name="spToColorSpace" Height="22" Margin="0,5,0,0">
+            <StackPanel Name="spToColorSpace" Margin="0,5,0,0">
                 <ComboBox Name="cbToColorSpaceType" Height="22" SelectionChanged="cbToColorSpaceType_SelectionChanged" >
                     <TextBlock>CMYK</TextBlock>
                     <TextBlock>CMYK + Pantone</TextBlock>
@@ -238,6 +238,17 @@
                     <TextBlock>Gray</TextBlock>
                     <TextBlock>Pantone</TextBlock>
                 </ComboBox>
+                <!--конвертировать в пантоны-->
+                <StackPanel Name="spToColorSpacePantone" Margin="0,5,0,0">
+                    <Label Content="Select Palettes:" Padding="0"></Label>
+                    <ListBox Name="lbPantonePalette" Margin="0,5,0,0" Height="84" SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
             </StackPanel>
             <!--конвертировать в оттенок цвета-->
             <StackPanel Name="spToColorTint" Margin="0,5,0,0">

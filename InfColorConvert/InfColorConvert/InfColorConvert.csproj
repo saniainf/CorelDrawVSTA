@@ -71,7 +71,9 @@
     <Compile Include="Convert\ConvertColorTint.cs" />
     <Compile Include="Convert\ConvertKeepColor.cs" />
     <Compile Include="Convert\ConvertUserColor.cs" />
+    <Compile Include="PaletteListItem.cs" />
     <Compile Include="RemapShapeRange.cs" />
+    <Compile Include="XmlPaletteService.cs" />
     <Page Include="DockerUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
