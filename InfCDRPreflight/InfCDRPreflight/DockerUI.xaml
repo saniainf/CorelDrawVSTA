@@ -16,6 +16,7 @@
             <Button Name="btnFountainFillToCMYK" Click="btnFountainFillToCMYK_Click" Content="Fountain fill to CMYK" Margin="0,5,0,0" Padding="2"></Button>
             <Separator Margin="0,10,0,5"></Separator>
             <Button Name="btnBitmapToCMYK" Click="btnBitmapToCMYK_Click"  Content="Bitmap to CMYK" Margin="0,5,0,0" Padding="2"></Button>
+            <Button Name="btnBitmapToGray" Click="btnBitmapToGray_Click"  Content="Bitmap to Gray" Margin="0,5,0,0" Padding="2"></Button>
             <DockPanel Margin="0,5,0,0">
                 <Button Name="btnResampleBitmap" Click="btnResampleBitmap_Click" Content="Resample Bitmap to" Padding="15,2,15,2"></Button>
                 <local:DoubleTextBox x:Name="tbBitmapDpi" Margin="7,0,7,0" Width="40" VerticalContentAlignment="Center" Text="300"/>

@@ -216,7 +216,14 @@ namespace InfCDRPreflight
 					s.Bitmap.ConvertTo(corel.cdrImageType.cdrCMYKColorImage);
 		}
 
-		private void resampleBitmap(corel.Shape s)
+        private void bitmapToGray(corel.Shape s)
+        {
+            if (s.Type == corel.cdrShapeType.cdrBitmapShape)
+                if (s.Bitmap.Mode != corel.cdrImageType.cdrGrayscaleImage)
+                    s.Bitmap.ConvertTo(corel.cdrImageType.cdrGrayscaleImage);
+        }
+
+        private void resampleBitmap(corel.Shape s)
 		{
 			int resolution = tbBitmapDpi.Value;
 			if (s.Type == corel.cdrShapeType.cdrBitmapShape)
@@ -296,7 +303,12 @@ namespace InfCDRPreflight
 			beginAction(bitmapToCMYK);
 		}
 
-		private void btnDropShadowBreakApart_Click(object sender, RoutedEventArgs e)
+        private void btnBitmapToGray_Click(object sender, RoutedEventArgs e)
+        {
+            beginAction(bitmapToGray);
+        }
+
+        private void btnDropShadowBreakApart_Click(object sender, RoutedEventArgs e)
 		{
 			beginAction(dropShadowBreakApart);
 		}
