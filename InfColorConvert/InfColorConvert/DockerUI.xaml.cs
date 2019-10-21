@@ -186,6 +186,9 @@ namespace InfColorConvert
 				case 2:
 					spToColorTint.Visibility = System.Windows.Visibility.Visible;
 					break;
+                case 3:
+                    spToColorClear.Visibility = System.Windows.Visibility.Visible;
+                    break;
 				default:
 					break;
 			}

@@ -213,6 +213,7 @@
                 <TextBlock>Color</TextBlock>
                 <TextBlock>Color Space</TextBlock>
                 <TextBlock>Color Tint</TextBlock>
+                <TextBlock>Color Clear</TextBlock>
             </ComboBox>
             <!--конвертировать в цвет-->
             <StackPanel Name="spToUserColor" Margin="0,5,0,0">
@@ -266,6 +267,10 @@
                     <RadioButton GroupName="groupToColorTint" Name="rbToColorTint" Content="Color Tint" Margin="0,5,0,0" IsChecked="True"></RadioButton>
                     <RadioButton GroupName="groupToColorTint" Name="rbToRandomColor" Content="Random Tint" Margin="10,5,0,0" IsChecked="False"></RadioButton>
                 </DockPanel>
+            </StackPanel>
+            <!--очистить заливку-->
+            <StackPanel Name="spToColorClear" Margin="0,5,0,0" Height="22">
+                
             </StackPanel>
 
             <Separator Margin="0,15,0,0"></Separator>

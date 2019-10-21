@@ -157,6 +157,9 @@ namespace InfColorConvert
 					//to color tint
 					convert = (IConvertColor)new ConvertColorTint(fountainColorTint, (rbToColorTint.IsChecked ?? false));
 					break;
+                case 3:
+                    convert = (IConvertColor)new ConvertColorClear();
+                    break;
 				default:
 					break;
 			}

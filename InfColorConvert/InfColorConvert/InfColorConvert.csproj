@@ -63,6 +63,7 @@
     <Compile Include="Check\CheckImpureGray.cs" />
     <Compile Include="Check\CheckNoneColor.cs" />
     <Compile Include="Check\CheckUserColor.cs" />
+    <Compile Include="Convert\ConvertColorClear.cs" />
     <Compile Include="Convert\ConvertColorSpaceCMYK.cs" />
     <Compile Include="Convert\ConvertColorSpaceCMYKPantone.cs" />
     <Compile Include="Convert\ConvertColorSpaceGray.cs" />
