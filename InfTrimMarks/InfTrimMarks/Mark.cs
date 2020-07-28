@@ -1,36 +1,42 @@
-﻿using Corel.Interop.VGCore;
+﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace InfTrimMarks
 {
-    class Mark
+    struct Mark : IEquatable<Mark>
     {
-        public double StartX { get { return startX; } }
-        public double StartY { get { return startY; } }
-        public double EndX { get { return (startX + height * directionX); } }
-        public double EndY { get { return (startY + height * directionY); } }
-        public double Height { get { return height; } set { height = value; } }
-        public double CenterX { get { return (startX + (height / 2) * directionX); } }
-        public double CenterY { get { return (startY + (height / 2) * directionY); } }
-        public int DirectionX { get { return directionX; } }
-        public int DirectionY { get { return directionY; } }
+        public readonly Point StartPoint;
+        public readonly Point EndPoint;
 
-        private double startX;
-        private double startY;
-        private double height;
-        private int directionX;
-        private int directionY;
-
-        public Mark(double startX, double startY, int directionX, int directionY, double height)
+        public Mark(Point start, Point end)
         {
-            this.startX = startX;
-            this.startY = startY;
-            this.height = height;
-            this.directionX = directionX;
-            this.directionY = directionY;
+            StartPoint = start;
+            EndPoint = end;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Mark)) return false;
+
+            var value = (Mark)obj;
+
+            return (StartPoint.Equals(value.StartPoint) &&
+                EndPoint.Equals(value.EndPoint));
+        }
+
+        public bool Equals(Mark other) =>
+            (StartPoint.Equals(other.StartPoint) &&
+            EndPoint.Equals(other.EndPoint));
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = 17;
+                result = result * 23 + StartPoint.GetHashCode();
+                result = result * 23 + EndPoint.GetHashCode();
+                return result;
+            }
         }
     }
 }

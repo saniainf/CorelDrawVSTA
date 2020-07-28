@@ -1,218 +1,162 @@
 ﻿using corel = Corel.Interop.VGCore;
 using Corel.Interop.VGCore;
-using System;
-using System.Windows;
 using System.Collections.Generic;
 
 namespace InfTrimMarks
 {
-	class SmartTrimMark
-	{
-		private corel.Application corelApp;
-		private double safeZone = 0.2d;
-		double decrement = 0.5d;
-		double outlineWidth = 0.0762d;
+    class SmartTrimMark
+    {
+        private corel.Application corelApp;
+        private double safeZone = 0.2d;
+        double decrement = 0.5d;
+        double outlineWidth = 0.0762d;
 
-		public SmartTrimMark(corel.Application app)
-		{
-			this.corelApp = app;
-		}
+        public SmartTrimMark(corel.Application app)
+        {
+            this.corelApp = app;
+        }
 
-		public void DoSmartTrimMarks(bool canDecrease, bool oneShoot, double offset, double markHeight, ShapeRange sr, bool whiteSubMark, bool leftEdge, bool rightEdge, bool topEdge, bool bottomEdge)
-		{
-			corel.Rect rect = new corel.Rect();
-			ShapeRange marks = new ShapeRange();
-			List<corel.Rect> crossShape;
-			Mark leftBot, leftTop, topLeft, topRight, rightBot, rightTop, botLeft, botRight;
-			foreach (corel.Shape currentShape in sr)
-			{
-				rect = currentShape.BoundingBox;
-				if (oneShoot)
-				{
-					leftBot = new Mark(rect.Left - offset, rect.Bottom, -1, 0, markHeight);
-					leftTop = new Mark(rect.Left - offset, rect.Top, -1, 0, markHeight);
-					topLeft = new Mark(rect.Left, rect.Top + offset, 0, 1, markHeight);
-					topRight = new Mark(rect.Right, rect.Top + offset, 0, 1, markHeight);
-					rightBot = new Mark(rect.Right + offset, rect.Bottom, 1, 0, markHeight);
-					rightTop = new Mark(rect.Right + offset, rect.Top, 1, 0, markHeight);
-					botLeft = new Mark(rect.Left, rect.Bottom - offset, 0, -1, markHeight);
-					botRight = new Mark(rect.Right, rect.Bottom - offset, 0, -1, markHeight);
-				}
-				else
-				{
-					leftBot = new Mark(rect.Left, rect.Bottom + offset, -1, 0, markHeight);
-					leftTop = new Mark(rect.Left, rect.Top - offset, -1, 0, markHeight);
-					topLeft = new Mark(rect.Left + offset, rect.Top, 0, 1, markHeight);
-					topRight = new Mark(rect.Right - offset, rect.Top, 0, 1, markHeight);
-					rightBot = new Mark(rect.Right, rect.Bottom + offset, 1, 0, markHeight);
-					rightTop = new Mark(rect.Right, rect.Top - offset, 1, 0, markHeight);
-					botLeft = new Mark(rect.Left + offset, rect.Bottom, 0, -1, markHeight);
-					botRight = new Mark(rect.Right - offset, rect.Bottom, 0, -1, markHeight);
-				}
+        public void DoSmartTrimMarks(DoMarksProperties props, ShapeRange sr)
+        {
+            HashSet<FigureBBox> figureBBoxes = GetFigureBBoxes(sr, props);
+            FigureBBox overBBox = GetOverlapBBox(figureBBoxes);
+            HashSet<Mark> marks = LayoutMarks(figureBBoxes, overBBox, props);
+            DrawMarks(marks, props);
+        }
 
-				rect.Offset(-(markHeight * 2), -(markHeight * 2));
-				rect.Width = rect.Width + (markHeight * 4);
-				rect.Height = rect.Height + (markHeight * 4);
-				crossShape = new List<corel.Rect>();
-				foreach (Shape s in sr)
-					if (!matchBB(s, currentShape))
-						if (crossAABBAABB(s.BoundingBox, rect))
-							crossShape.Add(s.BoundingBox);
+        private HashSet<FigureBBox> GetFigureBBoxes(ShapeRange sr, DoMarksProperties props)
+        {
+            HashSet<FigureBBox> result = new HashSet<FigureBBox>();
 
-				drawMark(leftBot, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(leftTop, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(topLeft, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(topRight, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(rightBot, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(rightTop, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(botLeft, marks, crossShape, currentShape.BoundingBox, canDecrease);
-				drawMark(botRight, marks, crossShape, currentShape.BoundingBox, canDecrease);
-			}
+            foreach (corel.Shape item in sr)
+            {
+                if (!props.OneCutting)
+                    result.Add(new FigureBBox(item.BoundingBox));
+                else
+                {
+                    var bbox = item.BoundingBox;
+                    var x = bbox.x - props.Offset;
+                    var y = bbox.y - props.Offset;
+                    var width = props.Offset * 2 + bbox.Width;
+                    var height = props.Offset * 2 + bbox.Height;
+                    result.Add(new FigureBBox(x, y, width, height));
+                }
+            }
 
-			removeDoubleLine(marks);
-			removeOutsideLine(marks, sr.BoundingBox, leftEdge, rightEdge, topEdge, bottomEdge);
-			corel.Shape groupMarks = marks.Group();
+            return result;
+        }
 
-			if (whiteSubMark)
-			{
-				corel.Shape wsm = groupMarks.Duplicate();
-				wsm.Outline.SetProperties(1, corelApp.OutlineStyles[0], corelApp.CreateCMYKColor(0, 0, 0, 0));
-				wsm.OrderBackOne();
-				ShapeRange tempSr = new ShapeRange();
-				tempSr.Add(wsm);
-				tempSr.Add(groupMarks);
-				groupMarks = tempSr.Group();
-			}
-		}
+        private FigureBBox GetOverlapBBox(HashSet<FigureBBox> boxes)
+        {
+            double x = double.MaxValue;
+            double y = double.MaxValue;
+            double right = double.MinValue;
+            double top = double.MinValue;
 
-		private void drawMark(Mark mark, ShapeRange marks, List<corel.Rect> crossShape, corel.Rect currentShape, bool canDecrease)
-		{
-			if (canDecrease)
-			{
-				do
-				{
-					if (!endPointInside(crossShape, mark))
-					{
-						marks.Add(drawLine(mark));
-						return;
-					}
-					else
-						mark.Height = mark.Height - decrement;
+            foreach (var item in boxes)
+            {
+                x = x < item.X ? x : item.X;
+                y = y < item.Y ? y : item.Y;
+                right = right > item.Right ? right : item.Right;
+                top = top > item.Top ? top : item.Top;
+            }
 
-				} while (mark.Height > 0);
-			}
-			else
-			{
-				if (!endPointInside(crossShape, mark))
-					marks.Add(drawLine(mark));
-			}
-		}
+            return new FigureBBox(x, y, right - x, top - y);
+        }
 
-		private void removeOutsideLine(ShapeRange marks, corel.Rect rect, bool leftEdge, bool rightEdge, bool topEdge, bool bottomEdge)
-		{
-			ShapeRange toRemove = new ShapeRange();
-			foreach (corel.Shape s in marks)
-			{
-				if (leftEdge && s.LeftX < rect.Left - safeZone)
-					toRemove.Add(s);
-				if (rightEdge && s.RightX > rect.Right + safeZone)
-					toRemove.Add(s);
-				if (topEdge && s.TopY > rect.Top + safeZone)
-					toRemove.Add(s);
-				if (bottomEdge && s.BottomY < rect.Bottom - safeZone)
-					toRemove.Add(s);
-			}
-			marks.RemoveRange(toRemove);
-			toRemove.Delete();
-		}
+        private HashSet<Mark> LayoutMarks(HashSet<FigureBBox> bBoxes, FigureBBox overBBox, DoMarksProperties props)
+        {
+            var marks = new HashSet<Mark>();
+            foreach (var bbox in bBoxes)
+            {
 
-		private corel.Shape drawLine(Mark mark)
-		{
-			corel.Shape line;
-			corel.Color color = corelApp.CreateRegistrationColor();
-			OutlineStyle oStyle = corelApp.OutlineStyles[0];
-			double width = outlineWidth;
-			line = corelApp.ActiveLayer.CreateLineSegment(mark.StartX, mark.StartY, mark.EndX, mark.EndY);
-			line.Outline.SetProperties(width, oStyle, color);
-			line.Fill.ApplyNoFill();
-			return line;
-		}
+                NewMark(marks, bBoxes, overBBox, props, bbox.X, bbox.Top - props.Offset, -1, 0);
+                NewMark(marks, bBoxes, overBBox, props, bbox.X, bbox.Y + props.Offset, -1, 0);
+                NewMark(marks, bBoxes, overBBox, props, bbox.X + props.Offset, bbox.Y, 0, -1);
+                NewMark(marks, bBoxes, overBBox, props, bbox.Right - props.Offset, bbox.Y, 0, -1);
+                NewMark(marks, bBoxes, overBBox, props, bbox.Right, bbox.Y + props.Offset, 1, 0);
+                NewMark(marks, bBoxes, overBBox, props, bbox.Right, bbox.Top - props.Offset, 1, 0);
+                NewMark(marks, bBoxes, overBBox, props, bbox.Right - props.Offset, bbox.Top, 0, 1);
+                NewMark(marks, bBoxes, overBBox, props, bbox.X + props.Offset, bbox.Top, 0, 1);
+            }
+            return marks;
+        }
 
-		private bool crossAABBAABB(corel.Rect r1, corel.Rect r2)
-		{
-			if (Math.Abs(r1.CenterX - r2.CenterX) > (r1.Width / 2 + r2.Width / 2))
-				return false;
-			if (Math.Abs(r1.CenterY - r2.CenterY) > (r1.Height / 2 + r2.Height / 2))
-				return false;
-			return true;
-		}
+        private void NewMark(HashSet<Mark> marks, HashSet<FigureBBox> bBoxes, FigureBBox overBBox, DoMarksProperties props, double sx, double sy, int directionX, int directionY)
+        {
+            if (PointOutside(overBBox, sx, sy, props))
+                return;
 
-		private bool matchBB(corel.Shape s1, corel.Shape s2)
-		{
-			if (s1.CenterX == s2.CenterX && s1.CenterY == s2.CenterY && s1.SizeWidth == s2.SizeWidth && s1.SizeHeight == s2.SizeHeight)
-				return true;
-			return false;
-		}
+            var height = props.MarkHeight;
+            do
+            {
+                var ex = directionX * height + sx;
+                var ey = directionY * height + sy;
+                if (PointInside(bBoxes, ex, ey))
+                    if (props.CanDecrease)
+                        height -= decrement;
+                    else break;
+                else
+                {
+                    marks.Add(new Mark(new Point(sx, sy), new Point(ex, ey)));
+                    break;
+                }
+            } while (height > 0);
+        }
 
-		private bool crossLineAABB(List<corel.Rect> rects, Mark mark)
-		{
-			double markHalfSize;
-			double rectHalfSize;
-			double tSize;
+        private bool PointInside(HashSet<FigureBBox> bBoxes, double x, double y)
+        {
+            foreach (var item in bBoxes)
+                if (item.IsPointInside(x, y))
+                    return true;
 
-			if (mark.DirectionX == 0)
-			{
-				//vert
-				markHalfSize = mark.Height / 2;
-				foreach (corel.Rect r in rects)
-				{
-					rectHalfSize = r.Height / 2;
-					tSize = Math.Abs(r.CenterY - mark.CenterY) - safeZone;
-					if (mark.CenterX > r.Left - safeZone && mark.CenterX < r.Right + safeZone)
-						if (tSize < markHalfSize + rectHalfSize)
-							return true;
-				}
-			}
-			else
-			{
-				//horiz
-				markHalfSize = mark.Height / 2;
-				foreach (corel.Rect r in rects)
-				{
-					rectHalfSize = r.Width / 2;
-					tSize = Math.Abs(r.CenterX - mark.CenterX) - safeZone;
-					if (mark.CenterY > r.Bottom - safeZone && mark.CenterY < r.Top + safeZone)
-						if (tSize < markHalfSize + rectHalfSize)
-							return true;
-				}
-			}
-			return false;
-		}
+            return false;
+        }
 
-		private bool endPointInside(List<corel.Rect> rects, Mark mark)
-		{
-			foreach (corel.Rect r in rects)
-			{
-				if (mark.EndX >= (r.Left - safeZone) && mark.EndX <= (r.Right + safeZone))
-					if (mark.EndY <= (r.Top + safeZone) && mark.EndY >= (r.Bottom - safeZone))
-						return true;
-			}
-			return false;
-		}
+        private bool PointOutside(FigureBBox box, double x, double y, DoMarksProperties props)
+        {
+            if (props.ExcludeLeftEdge && x < box.X + safeZone)
+                return true;
+            if (props.ExcludeRightEdge && x > box.Right - safeZone)
+                return true;
+            if (props.ExcludeTopEdge && y > box.Top - safeZone)
+                return true;
+            if (props.ExcludeBottomEdge && y < box.Y + safeZone)
+                return true;
+            return false;
+        }
 
-		private void removeDoubleLine(ShapeRange marks)
-		{
-			ShapeRange toRemove = new ShapeRange();
-			for (int i = 1; i <= marks.Count; i++)
-			{
-				for (int j = i + 1; j <= marks.Count; j++)
-				{
-					if (matchBB(marks.Shapes[i], marks.Shapes[j]))
-						toRemove.Add(marks.Shapes[i]);
-				}
-			}
-			marks.RemoveRange(toRemove);
-			toRemove.Delete();
-		}
-	}
+        private void DrawMarks(HashSet<Mark> marks, DoMarksProperties props)
+        {
+            ShapeRange sr = new ShapeRange();
+
+            foreach (var item in marks)
+                sr.Add(DrawLine(item));
+
+            Shape groupMarks = sr.Group();
+
+            if (props.WhiteSubMark)
+            {
+                Shape wsm = groupMarks.Duplicate();
+                wsm.Outline.SetProperties(1, corelApp.OutlineStyles[0], corelApp.CreateCMYKColor(0, 0, 0, 0));
+                wsm.OrderBackOne();
+                ShapeRange tempSr = new ShapeRange();
+                tempSr.Add(wsm);
+                tempSr.Add(groupMarks);
+                tempSr.Group();
+            }
+        }
+
+        private Shape DrawLine(Mark mark)
+        {
+            Shape line;
+            corel.Color color = corelApp.CreateRegistrationColor();
+            OutlineStyle oStyle = corelApp.OutlineStyles[0];
+            double width = outlineWidth;
+            line = corelApp.ActiveLayer.CreateLineSegment(mark.StartPoint.X, mark.StartPoint.Y, mark.EndPoint.X, mark.EndPoint.Y);
+            line.Outline.SetProperties(width, oStyle, color);
+            line.Fill.ApplyNoFill();
+            return line;
+        }
+    }
 }

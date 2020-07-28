@@ -25,19 +25,32 @@ namespace InfTrimMarks
             corelApp.ActiveDocument.Unit = cdrUnit.cdrMillimeter;
             ShapeRange sr = new ShapeRange();
             sr = corelApp.ActiveSelectionRange;
-            double offset;
-            double markHeight;
 
             if (sr.Count == 0)
                 return;
-            if ((chxLeft.IsChecked ?? false) && (chxRight.IsChecked ?? false) && (chxTop.IsChecked ?? false) && (chxBottom.IsChecked ?? false))
+
+            if ((chxLeft.IsChecked ?? false) &&
+                (chxRight.IsChecked ?? false) &&
+                (chxTop.IsChecked ?? false) &&
+                (chxBottom.IsChecked ?? false))
                 return;
 
-            offset = tbOffset.Value;
-            markHeight = tbMarkHeight.Value;
             SmartTrimMark smtm = new SmartTrimMark(corelApp);
             corelApp.Optimization = true;
-            smtm.DoSmartTrimMarks(chxCanDecrease.IsChecked ?? false, chxOneShootCut.IsChecked ?? false, offset, markHeight, sr, chxWhiteSubMark.IsChecked ?? false, chxLeft.IsChecked ?? false, chxRight.IsChecked ?? false, chxTop.IsChecked ?? false, chxBottom.IsChecked ?? false);
+
+            var props = new DoMarksProperties(
+                tbOffset.Value,
+                tbMarkHeight.Value,
+                chxOneShootCut.IsChecked ?? false,
+                chxCanDecrease.IsChecked ?? false,
+                chxWhiteSubMark.IsChecked ?? false,
+                chxLeft.IsChecked ?? false,
+                chxRight.IsChecked ?? false,
+                chxTop.IsChecked ?? false,
+                chxBottom.IsChecked ?? false);
+
+            smtm.DoSmartTrimMarks(props, sr);
+
             corelApp.ActiveDocument.ClearSelection();
             corelApp.Optimization = false;
             corelApp.ActiveWindow.Refresh();

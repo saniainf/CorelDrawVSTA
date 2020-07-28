@@ -52,13 +52,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DoMarksProperties.cs" />
     <Compile Include="DoubleTextBox.cs" />
+    <Compile Include="FigureBBox.cs" />
     <Compile Include="Mark.cs" />
     <Compile Include="NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Point.cs" />
     <Compile Include="SmartTrimMark.cs" />
-    <Compile Include="TrimMarksPreset.cs" />
     <Page Include="DockerUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
