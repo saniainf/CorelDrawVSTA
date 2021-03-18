@@ -20,9 +20,9 @@ namespace InfColorConvert
 
         public corel.Color Convert(corel.Color color)
         {
-            if (!useTint && color.IsSpot && castColor.IsSpot)
+            if (!useTint && color.Type == cdrColorType.cdrColorSpot && castColor.IsSpot)
                 return ConvertPantoneKeepTint(color);
-            if (!useTint && !color.IsSpot && castColor.IsSpot)
+            if (!useTint && color.Type != cdrColorType.cdrColorSpot && castColor.IsSpot)
             {
                 corel.Color c = new corel.Color();
                 c.CopyAssign(color);

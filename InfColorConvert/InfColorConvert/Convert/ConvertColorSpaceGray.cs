@@ -11,7 +11,7 @@ namespace InfColorConvert
 	{
 		public corel.Color Convert(corel.Color color)
 		{
-			if (color.IsGray)
+			if (color.Type == cdrColorType.cdrColorGray)
 				return color;
 
 			corel.Color c = new corel.Color();

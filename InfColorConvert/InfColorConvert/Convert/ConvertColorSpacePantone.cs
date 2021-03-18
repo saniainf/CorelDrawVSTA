@@ -30,7 +30,7 @@ namespace InfColorConvert
 		{
 			string colorName;
 
-			if (color.IsSpot)
+			if (color.Type == cdrColorType.cdrColorSpot)
 			{
 				colorName = color.Name;
 
@@ -60,7 +60,7 @@ namespace InfColorConvert
 			{
 				corel.Color c = foundColors[colorName];
 				// если спот сохранить тинт
-				if (color.IsSpot && color.IsTintable && c.IsSpot && c.IsTintable)
+				if (color.Type == cdrColorType.cdrColorSpot && color.IsTintable && c.IsSpot && c.IsTintable)
 				{
 					c.Tint = color.Tint;
 					return c;
@@ -70,7 +70,7 @@ namespace InfColorConvert
 			}
 
 			// поиск в палитрах корела если палитра Locked
-			if (color.IsSpot)
+			if (color.Type == cdrColorType.cdrColorSpot)
 			{
 				foreach (string id in palettesID)
 				{
