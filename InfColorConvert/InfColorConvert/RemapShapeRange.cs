@@ -61,6 +61,7 @@ namespace InfColorConvert
                     case cdrShapeType.cdrBevelGroupShape:
                         break;
                     case cdrShapeType.cdrBitmapShape:
+                        RemapCdrBitmapShape(s);
                         break;
                     case cdrShapeType.cdrBlendGroupShape:
                         break;
@@ -137,6 +138,12 @@ namespace InfColorConvert
         }
 
         // convert
+
+        private void RemapCdrBitmapShape(corel.Shape s)
+        {
+            if (s.Bitmap.Mode != cdrImageType.cdrBlackAndWhiteImage) return;
+            RemapCdrSimpleShape(s);
+        }
 
         private void RemapCdrSimpleShape(corel.Shape s)
         {
